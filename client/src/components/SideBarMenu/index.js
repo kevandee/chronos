@@ -1,9 +1,12 @@
 import React from "react";
-import { Typography, Button } from "@mui/material";
+import { Typography, Button, Link, Avatar } from "@mui/material";
 
 import styles from './SideBarMenu.module.scss';
 
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import AddIcon from '@mui/icons-material/Add';
+import SettingsIcon from '@mui/icons-material/Settings';
+import PersonIcon from '@mui/icons-material/Person';
 
 const SideBarMenu = () => {
     return (
@@ -20,22 +23,32 @@ const SideBarMenu = () => {
                 </div>
                 <div className={styles.calendars_list}>
                     <table>
-                        <tr>
-                            <td>
-                                <input type="radio" id="General" name="calendar" value="General" checked/>
-                                <label for="General">General</label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input type="radio" id="Calendar1" name="calendar" value="Calendar1"/>
-                                <label for="Calendar1">Calendar1</label>
-                            </td>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input type="radio" id="General" name="calendar" value="General" defaultChecked={true}/>
+                                    <label htmlFor="General">General</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="radio" id="Calendar1" name="calendar" value="Calendar1"/>
+                                    <label htmlFor="Calendar1">Calendar1</label>
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
-                    <Button>Add new</Button>
+                    <Button><AddIcon />Add new</Button>
                 </div>
             </div> 
+            <div className={styles.links}>
+                <Link href='/account'><PersonIcon/>Account</Link>
+                <Link href='/settings'><SettingsIcon/>Settings</Link>
+            </div>
+            <div className={styles.user}>
+                <Avatar alt='User Name' src='img' sx={{width: '50px', height: '50px'}}></Avatar>
+                <span>Yaroslav<br/>Doroshenko</span>
+            </div>
         </section>
     );
 }

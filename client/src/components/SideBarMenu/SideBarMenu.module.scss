@@ -1,10 +1,14 @@
 @import '../../index.scss';
 
 .sidebar_container {
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    justify-content: space-between;
     max-width: 250px;
+    border-right: 1px solid #F1F1F1;
+    height: 100vh;
+    padding: 30px 0;
     
     .logo_container {
         .logo {
@@ -15,6 +19,10 @@
     }
 
     .calendars_container {
+        border-bottom: 1px solid #F1F1F1;
+        flex: 1;
+        margin-top: 80px;
+
         .title {
             display: flex;
             align-items: center;
@@ -76,8 +84,54 @@
             }
 
             button {
-                align-self: flex-start;
+                margin-top: 5px;
+                margin-bottom: 10px;
+                align-self: center;
+                color: $main-orange-color;
+                text-transform: capitalize;
+                font-size: 16px;
+                font-weight: 500;
+
+                svg {
+                    background-color: $main-orange-color;
+                    border-radius: 100%;
+                    padding: 3px;
+                    color:#fff;
+                    margin-right: 5px;
+                }
             }
+        }
+    }
+
+    .links {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+        flex: 3;
+        margin-top: 80px;
+
+        a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            gap: 5px;
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 24px;
+        }
+    }
+
+    .user {
+        align-items: flex-end;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+
+        span {
+            font-weight: 700;
+            font-size: 18px;
+            line-height: 104.7%;
         }
     }
 }

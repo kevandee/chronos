@@ -8,21 +8,24 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import styles from './TasksCalendar.module.scss';
 
 import ModalWindowEvent from "../ModalWindowEvent/index";
+import { useOpenModal } from "../../hooks/useOpenModal";
 
 const TasksCalendar = () => {
     const [selectInfo, setSelectInfo] = useState();
-    const [isOpen, setIsOpen] = useState(false);
+
+    const modalInfoEvent = useOpenModal(false);
 
     const selectHandle = (selectInfo) => {
         console.log(selectInfo);
         setSelectInfo(selectInfo);
-        setIsOpen(true);
+        modalInfoEvent.handleOpen();
     }
 
     return (
         <section className={styles.events_container}>
             <ModalWindowEvent 
-                open={isOpen}            
+                open={modalInfoEvent.isOpen}
+                handleClose={modalInfoEvent.handleClose}
             />
             <div className={styles.heading}>
                 <span className={styles.date}>Tuesday, 8</span>

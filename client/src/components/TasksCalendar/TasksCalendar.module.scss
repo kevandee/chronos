@@ -1,4 +1,4 @@
-
+@import '../../index.scss';
 
 .events_container {
     .heading {
@@ -24,4 +24,22 @@
         border-radius: 20px;
         position: relative;
     }
+}
+
+thead {
+    display: none;
+}
+
+tbody {
+    border: none;
+}
+
+table {
+    border-radius: 10px;
+    border: none;
+}
+
+
+tr:first-child() {
+    border: none;
 }

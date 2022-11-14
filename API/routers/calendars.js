@@ -6,13 +6,13 @@ const router = (require('express')).Router();
 router.get('/', authenticateToken, controller.getCalendarsList);
 router.post('/', authenticateToken, controller.newCalendar);
 router.route('/:calendarId')
-      .get(controller.getCalendar)
+      .get(authenticateToken, controller.getCalendar)
       .patch(authenticateToken, controller.updateCalendar)
       .delete(authenticateToken, controller.deleteCalendar);
 router.route('/:calendarId/members')
-      .get(controller.getCalendarMembers)
-      .post(authenticateToken, controller.newCalendarMember);
-router.route('/:calendarId/events')
+      .get(authenticateToken, controller.getCalendarMembers)
+      .post(authenticateToken, controller.setCalendarMembers);
+router.route('/:calendarId/events/:eventId')
       .get(authenticateToken, controller.getCalendarEvents)
       .post(authenticateToken, controller.newCalendarEvent)
       .delete(authenticateToken, controller.deleteCalendarEvent);

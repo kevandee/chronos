@@ -26,6 +26,7 @@ const TasksCalendar = () => {
             <ModalWindowEvent 
                 open={modalInfoEvent.isOpen}
                 handleClose={modalInfoEvent.handleClose}
+                time={selectInfo}
             />
             <div className={styles.heading}>
                 <span className={styles.date}>Tuesday, 8</span>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import moment from 'moment';
 
 import FullCalendar from "@fullcalendar/react";
 import daygridPlugin from "@fullcalendar/daygrid";
@@ -12,11 +13,18 @@ import { useOpenModal } from "../../hooks/useOpenModal";
 
 const TasksCalendar = () => {
     const [selectInfo, setSelectInfo] = useState();
+    const [isEdit, setIsEdit] = useState(false);
 
     const modalInfoEvent = useOpenModal(false);
 
     const selectHandle = (selectInfo) => {
-        console.log(selectInfo);
+        setIsEdit(false);
+        setSelectInfo(selectInfo);
+        modalInfoEvent.handleOpen();
+    }
+
+    const editHandle = (selectInfo) => {
+        setIsEdit(true);
         setSelectInfo(selectInfo);
         modalInfoEvent.handleOpen();
     }
@@ -26,7 +34,8 @@ const TasksCalendar = () => {
             <ModalWindowEvent 
                 open={modalInfoEvent.isOpen}
                 handleClose={modalInfoEvent.handleClose}
-                time={selectInfo}
+                selectInfo={selectInfo}
+                isEdit={isEdit}
             />
             <div className={styles.heading}>
                 <span className={styles.date}>Tuesday, 8</span>
@@ -37,6 +46,8 @@ const TasksCalendar = () => {
                 selectable={true}
                 allDaySlot={false}
                 dayMaxEvents={true}
+                nowIndicator={true}
+                slotEventOverlap={false}
                 headerToolbar={{
                     start: '',
                     end: ''
@@ -51,7 +62,9 @@ const TasksCalendar = () => {
                     minute: "2-digit",
                     hour12: false
                 }}
+                scrollTime={moment().subtract('200', 'minutes').format('HH:mm:ss')}
                 select={selectHandle}
+                eventClick={editHandle}
             />
         </section>
     );

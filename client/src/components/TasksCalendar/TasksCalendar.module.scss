@@ -30,16 +30,10 @@ thead {
     display: none;
 }
 
-tbody {
-    border: none;
-}
-
 table {
     border-radius: 10px;
     border: none;
 }
-
-
-tr:first-child() {
-    border: none;
+col {
+    width: 100px;
 }

@@ -4,11 +4,25 @@ const {
     generateAccessToken, 
     authenticateLoginToken
 } = require('../utils/token');
-const hashPassword = require('../utils/hashPassword')
-const {validateRegisterData} = require('../utils/validateAuth')
-const user = new (require('../models/users'))()
-const sendLetter = require('../utils/nodemailer')
-const config = require('../config.json')
+const hashPassword = require('../utils/hashPassword');
+const {validateRegisterData} = require('../utils/validateAuth');
+const users = new (require('../models/users'))();
+const calendars = new (require("../models/calendars"))();
+const users_calendars = new (require("../models/users_calendars"))();
+const sendLetter = require('../utils/nodemailer');
+const config = require('../config.json');
+
+async function newCalendar(userId) {
+    const calendar = {
+        title: "Default",
+        create_date: new Date(),
+        author_id: userId,
+    }
+
+    const savedCalendar = await calendars.save(calendar);
+    await users_calendars.save({user_id: userId, calendar_id: savedCalendar.id, user_role: 'assignee'});
+    await users.save({id: userId, default_calendar_id: savedCalendar.id});
+}
 
 module.exports = {
     async register(req, res) {
@@ -19,14 +33,14 @@ module.exports = {
             res.sendStatus(400);
             return;
         }
-        if ((await user.find({login: data.login})).length != 0) {
+        if ((await users.find({login: data.login})).length != 0) {
             res.status(409).json({
                 status: 409,
                 message: "login already exists"
             });
             return;
         }
-        if ((await user.find({email: data.email})).length != 0 || (await user.find({email: 'unconfirmed@'+data.email})).length != 0) {
+        if ((await users.find({email: data.email})).length != 0 || (await users.find({email: 'unconfirmed@'+data.email})).length != 0) {
             res.status(409).json({
                 status: 409,
                 message: "email already exists"
@@ -40,7 +54,8 @@ module.exports = {
         }
         const email = data.email;
         data.email = `unconfirmed@${email}`;
-        const id = (await user.save(data)).id;
+        const id = (await users.save(data)).id;
+        await newCalendar(id);
 
         let confirmToken = generateConfirmToken({id, email, login: data.login});
         let message = `
@@ -71,7 +86,7 @@ module.exports = {
         }
 
         data.password = hashPassword(data.password);
-        let userData = await user.find({login: data.login, password: data.password});
+        let userData = await users.find({login: data.login, password: data.password});
         if (userData.length == 0) {
             res.sendStatus(401);
             return;
@@ -102,7 +117,7 @@ module.exports = {
             res.sendStatus(400);
             return;
         }
-        if ((await user.find({email: data.email})).length == 0) {
+        if ((await users.find({email: data.email})).length == 0) {
             res.sendStatus(404);
             return;
         }
@@ -134,7 +149,7 @@ module.exports = {
         delete data.iat;
         delete data.exp;
 
-        await user.save(data);
+        await users.save(data);
         res.sendStatus(200);
     },
 
@@ -152,10 +167,10 @@ module.exports = {
             res.sendStatus(400);
             return;
         }
-        let userData = await user.find({email: data.email});
+        let userData = await users.find({email: data.email});
         
         userData.password = hashPassword(newPassword);
-        if(await user.save(userData) == -1) {
+        if(await users.save(userData) == -1) {
             res.sendStatus(400);
             return
         }

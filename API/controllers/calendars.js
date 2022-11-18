@@ -100,7 +100,26 @@ module.exports = {
     },
 
     async deleteCalendar(req, res) {
-        /////////////////////////////////////////////////////
+        const {calendarId} = req.params;
+        if (isNaN(parseInt(calendarId))) {
+            res.sendStatus(400);
+            return;
+        }
+        const members = await users_calendars.find({calendar_id: calendarId});
+        const user = members.find(member => member.user_id == req.user.id);
+        if (!user || user.user_role != "assignee") {
+            res.sendStatus(403);
+            return;
+        }
+
+        if(members.length == 1) {
+            await calendars.delete({id: calendarId});
+            res.sendStatus(200);
+            return;
+        }
+
+        await users_calendars.delete({user_id: req.user.id, calendar_id: calendarId});
+        res.sendStatus(200);
     },
     
     async getCalendarMembers(req,res) {
@@ -183,6 +202,7 @@ module.exports = {
         }
 
         const user = await users_calendars.find({user_id: req.user.id, calendar_id: calendarId});
+        console.log(user)
         if (user.user_role != "assignee") {
             res.sendStatus(403);
             return;
@@ -221,4 +241,42 @@ module.exports = {
         }
         res.sendStatus(200);
     },
+
+    async inviteMembersToCalendar(req, res) {
+        const {calendarId, eventId} = req.params;
+        if (isNaN(parseInt(calendarId)) || isNaN(parseInt(eventId))) {
+            res.sendStatus(400);
+            return;
+        }
+        const members = await users_calendars.find({calendar_id: calendarId});
+        const user = members.find(member => member.user_id == req.user.id);
+        if (!user || user.user_role != "assignee") {
+            res.sendStatus(403);
+            return;
+        }
+
+        const data = req.body;
+        if(!data.members) {
+            res.sendStatus(400);
+            return;
+        }
+
+        for (const member of data.members) {
+            if (data.members.filter(val => val.id == member.id).length != 1) {
+                res.sendStatus(400);
+                return;
+            }
+        }
+
+        for (const newMember of data.members) {
+            let member = members.filter(val => val.user_id == newMember.id)
+            if (member && member.user_role != newMember.role) {
+                await users_calendars.table.update();
+            }
+
+            await users_calendars.save({user_id: newMember.id, calendar_id: calendarId, user_role: newMember.role});
+        }
+
+        res.sendStatus(200);
+    }
 }

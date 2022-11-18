@@ -40,7 +40,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     color: {
-      type: DataTypes.CHAR(7),
+      type: DataTypes.CHAR(8),
       allowNull: true,
       defaultValue: "_cp866\\'#8a2be2\\'"
     }

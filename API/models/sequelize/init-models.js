@@ -14,6 +14,8 @@ function initModels(sequelize) {
 
   events_calendars.belongsTo(calendars, { as: "calendar", foreignKey: "calendar_id"});
   calendars.hasMany(events_calendars, { as: "events_calendars", foreignKey: "calendar_id"});
+  users.belongsTo(calendars, { as: "default_calendar", foreignKey: "default_calendar_id"});
+  calendars.hasMany(users, { as: "users", foreignKey: "default_calendar_id"});
   users_calendars.belongsTo(calendars, { as: "calendar", foreignKey: "calendar_id"});
   calendars.hasMany(users_calendars, { as: "users_calendars", foreignKey: "calendar_id"});
   events_calendars.belongsTo(events, { as: "event", foreignKey: "event_id"});

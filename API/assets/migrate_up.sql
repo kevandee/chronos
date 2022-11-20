@@ -18,10 +18,13 @@ CREATE TABLE IF NOT EXISTS calendars
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(256) NOT NULL,
-    author_id INT,
+    author_id INT NOT NULL,
     create_date TIMESTAMP,
     FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE SET NULL
 );
+
+ALTER TABLE users ADD COLUMN default_calendar_id INT;
+ALTER TABLE users ADD FOREIGN KEY (default_calendar_id) REFERENCES calendars(id) ON DELETE CASCADE;
 
 CREATE TABLE IF NOT EXISTS events
 (
@@ -33,7 +36,7 @@ CREATE TABLE IF NOT EXISTS events
     start_at TIMESTAMP NOT NULL,
     end_at TIMESTAMP NOT NULL,
     type ENUM('arrangement', 'reminder', 'task'),
-    color CHAR(7) default('#8a2be2'),
+    color CHAR(8) default('#8a2be2'),
     FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE SET NULL
 );
 

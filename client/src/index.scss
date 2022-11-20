@@ -11,7 +11,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: $main-dark-color;
-  height: 100%;
+  height: 100vh;
 }
 
 code {
@@ -87,4 +87,5 @@ code {
 .fc-timegrid-event-harness-inset .fc-timegrid-event,
 .fc-timegrid-event.fc-event-mirror, .fc-timegrid-more-link {
   border-radius: 10px;
+  border: none;
 }

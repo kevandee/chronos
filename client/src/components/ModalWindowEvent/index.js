@@ -29,18 +29,20 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
   const [eventType, setEventType] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [color, setColor] = useState(0);
 
-  // const [cardColor, setCardColor] = useState('#54A3FF');
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit } = useForm();
 
   useEffect(() => {
     if (isEdit) {
       setTitle(selectInfo?.event?.title);
       setDescription(selectInfo?.event?._def.extendedProps.description);
-      console.log(selectInfo?.event);
+      setEventType(selectInfo?.event?._def.extendedProps.event);
+      setColor(selectInfo?.event?._def.backgroundColor);
     } else {
       setTitle("");
       setDescription("");
+      setColor(0);
     }
   }, [selectInfo, isEdit]);
 
@@ -55,6 +57,9 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
   const addEvent = async (data) => {
     try {
       setTitle("");
+      setEventType("");
+      setColor(0);
+      
       const calendarApi = selectInfo.view.calendar;
 
       //Add here axios to db
@@ -65,11 +70,12 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
         description: data.description,
         start: selectInfo.startStr,
         end: selectInfo.endStr,
-        color: data.color,
+        backgroundColor: data.color,
+        event: data.event
       });
 
       handleClose();
-      reset({ title: "", event: "" });
+      //reset({ title: "", event: "" });
       setEventType("");
     } catch (err) {
       console.log(err);
@@ -78,19 +84,24 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
 
   const editEvent = async (data) => {
     try {
-      setTitle(selectInfo.event.title);
+      setTitle(selectInfo?.event?.title);
+      setEventType(selectInfo?.event?._def.extendedProps.event);
+      //setColor(colors.indexOf(selectInfo?.event?._def.backgroundColor));
+
       const calendarApi = selectInfo.view.calendar;
-      console.log(selectInfo);
       //Update db with axios
 
       const currentEvent = calendarApi.getEventById(selectInfo.event.id);
+
       if (currentEvent) {
         console.log(currentEvent._def.title);
-        currentEvent.setProp("title", data.title);
-        currentEvent.setExtendedProp("description", data.description);
-        currentEvent.setProp("color", data.color);
+        currentEvent.setProp("title", data.title === '' ? title : data.title);
+        currentEvent.setExtendedProp("description", data.description === '' ? description : data.description);
+        currentEvent.setExtendedProp("eventType", data.event === '' ? eventType : data.event);
+        currentEvent.setProp("backgroundColor", data.color);
       }
-      console.log(currentEvent);
+
+      handleClose();
     } catch (err) {
       console.log(err);
     }
@@ -103,6 +114,7 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
         selectInfo.event.remove();
         setTitle('');
         setDescription('');
+
         handleClose();
     }
     catch(err) {
@@ -177,8 +189,13 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
                   type="radio"
                   name="cardColor"
                   value={el}
-                  {...register("color")}
+                  {...register("color", {
+                    onChange: (e) => {
+                      setColor(colors.indexOf(e.target.value));
+                    }
+                  })}
                   required
+                  defaultChecked={isEdit ? index === color : index === 0}
                 />
               </div>
             ))}
@@ -188,7 +205,7 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
               <AccessTimeIcon />
               {selectInfo && (
                 <span>
-                  {getTime(selectInfo.startStr)} - {getTime(selectInfo.endStr)}
+                  {getTime(isEdit ? selectInfo.event.startStr : selectInfo.startStr)} - {getTime(isEdit ? selectInfo.event.endStr : selectInfo.endStr)}
                 </span>
               )}
             </div>
@@ -200,7 +217,7 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
               className={styles.saveBtn}
               type="submit"
             >
-                Save
+              Save
             </Button>
           </div>
         </form>

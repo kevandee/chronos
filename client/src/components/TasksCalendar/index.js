@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import moment from 'moment';
+//import styled from "@emotion/styled";
 
 import FullCalendar from "@fullcalendar/react";
 import daygridPlugin from "@fullcalendar/daygrid";
@@ -26,6 +27,7 @@ const TasksCalendar = () => {
     const editHandle = (selectInfo) => {
         setIsEdit(true);
         setSelectInfo(selectInfo);
+        console.log(selectInfo);
         modalInfoEvent.handleOpen();
     }
 
@@ -41,31 +43,33 @@ const TasksCalendar = () => {
                 <span className={styles.date}>Tuesday, 8</span>
                 <span className={styles.holiday}>Day of cultural and masters folk art</span>
             </div>
-            <FullCalendar
-                editable={true}
-                selectable={true}
-                allDaySlot={false}
-                dayMaxEvents={true}
-                nowIndicator={true}
-                slotEventOverlap={false}
-                headerToolbar={{
-                    start: '',
-                    end: ''
-                }}
-                plugins={[daygridPlugin, interactionPlugin, timeGridPlugin]}
-                initialView="timeGridDay"
-                slotDuration={'00:15'}
-                slotLabelInterval={'01:00'}
-                height={'90%'}
-                slotLabelFormat={{
-                    hour: "numeric",
-                    minute: "2-digit",
-                    hour12: false
-                }}
-                scrollTime={moment().subtract('200', 'minutes').format('HH:mm:ss')}
-                select={selectHandle}
-                eventClick={editHandle}
-            />
+            {/* <StyleWrapper> */}
+                <FullCalendar
+                    editable={true}
+                    selectable={true}
+                    allDaySlot={false}
+                    dayMaxEvents={true}
+                    nowIndicator={true}
+                    slotEventOverlap={false}
+                    headerToolbar={{
+                        start: '',
+                        end: ''
+                    }}
+                    plugins={[daygridPlugin, interactionPlugin, timeGridPlugin]}
+                    initialView="timeGridDay"
+                    slotDuration={'00:15'}
+                    slotLabelInterval={'01:00'}
+                    height={'90%'}
+                    slotLabelFormat={{
+                        hour: "numeric",
+                        minute: "2-digit",
+                        hour12: false
+                    }}
+                    scrollTime={moment().subtract('200', 'minutes').format('HH:mm:ss')}
+                    select={selectHandle}
+                    eventClick={editHandle}
+                />
+            {/* </StyleWrapper> */}
         </section>
     );
 }

@@ -1,5 +1,6 @@
 const Model = require('./model');
 const {users, calendars, users_calendars, events, events_calendars} = require('./initSequalize');
+const calendarModel = new (require('./calendars'))();
 
 class Users extends Model {
     constructor() {
@@ -39,7 +40,7 @@ class Users extends Model {
         });
 
         list = await Promise.all(list.map(async (calendar) => {
-            calendar.dataValues.members = calendars.getCalendarMembers(calendar.id);
+            calendar.dataValues.members = calendarModel.getCalendarMembers(calendar.id);
             return calendar;
         }))
 

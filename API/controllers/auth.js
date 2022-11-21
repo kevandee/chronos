@@ -74,6 +74,7 @@ module.exports = {
     },
 
     async login(req, res) {
+        console.log('login');
         let data = req.body;
         if (data.token && await authenticateLoginToken(data.token)) {
             res.cookie("token", data.token);
@@ -88,11 +89,11 @@ module.exports = {
         data.password = hashPassword(data.password);
         let userData = await users.find({login: data.login, password: data.password});
         if (userData.length == 0) {
-            res.sendStatus(401);
+            res.status(401).json({ error: 'Login or password is incorrect' });;
             return;
         }
         if(userData.email.match(/unconfirmed@([^\s]+)@([^\s^.]+).([^\s]+)/gm)) {
-            res.status(403).json({error: 403, message: "please, confirm your email address"});
+            res.status(403).json({error: "Please, confirm your email address"});
             return;
         }
 
@@ -175,5 +176,25 @@ module.exports = {
             return
         }
         res.sendStatus(200);
+    },
+
+    async getMe(req, res) {
+        try {
+            const info = await authenticateLoginToken(req.cookies.token);
+            if (!info) {
+                return res.status(401).send('Access denied');
+            }
+            const user = await users.find({id: info.id});
+    
+            if(!user) {
+                return res.status(404).send('User has not been found');
+            }
+    
+            return res.json(user);
+        }
+        catch(err) {
+            console.log(err);
+            res.status(500).send('Access denied');
+        }
     }
 }

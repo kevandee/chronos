@@ -1,3 +1,6 @@
+const config = require('../config.json');
+const fetch = require('node-fetch');
+
 const users = new (require("../models/users"))();
 const calendars = new (require("../models/calendars"))();
 const events = new (require("../models/events"))();
@@ -7,7 +10,7 @@ const events_calendars = new (require("../models/events_calendars"))();
 module.exports = {
     async getCalendarsList(req,res) {
         let calendars = await users.getUsersCalendars({user_id: req.user.id});
-        console.log(calendars);
+        // console.log(calendars);
         res.json({calendars});
     },
 
@@ -202,7 +205,7 @@ module.exports = {
         }
 
         const user = await users_calendars.find({user_id: req.user.id, calendar_id: calendarId});
-        console.log(user)
+        // console.log(user)
         if (user.user_role != "assignee") {
             res.sendStatus(403);
             return;

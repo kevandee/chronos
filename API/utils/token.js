@@ -58,11 +58,12 @@ function authenticateConfirmToken(token) {
 async function authenticateLoginToken(token) {
   return new Promise((resolve, reject) => {
     jwt.verify(token, config.jwt.secret, async (err, decoded) => {
-      if (err || await users.find(decoded.id) == -1) {
-        resolve(false);
+      if (err || !(await users.find({id: decoded.id}))) {
+        resolve(null);
         return;
       };
-      resolve(true);
+      
+      resolve(decoded);
     })
   })
 }

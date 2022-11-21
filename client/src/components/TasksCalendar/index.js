@@ -32,17 +32,10 @@ const TasksCalendar = () => {
 
   const getHoliday = async () => {
     try {
-      const api_key = "0d9204c93586457bbfd20b22c0631788";
-      let country = "UA";
-      const date = new Date();
-      const year = date.getFullYear();
-      const month = date.getMonth();
-      const day = date.getDate();
+      const res = await axios.get(`http://localhost:8000/api/holiday`);
 
-      const res = await axios.get(`https://holidays.abstractapi.com/v1/?api_key=${api_key}&country=${country}&year=${year}&month=${month + 1}&day=${day}`);
-
-      if(res.data[0]) {
-        setHolidays(res.data[0].name);
+      if(res.data) {
+        setHolidays(res.data.name);
       }
     } catch (err) {
       console.log(err);

@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS chronos_api;
 CREATE USER IF NOT EXISTS 'chronos_admin'@'localhost' IDENTIFIED BY 'securepass';
-GRANT ALL PRIVILEGES ON usof_backend.* TO 'chronos_admin'@'localhost';
+GRANT ALL PRIVILEGES ON chronos_api.* TO 'chronos_admin'@'localhost';
 
 USE chronos_api;
 

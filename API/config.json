@@ -3,9 +3,10 @@
     "HOLIDAY_API_KEY": "0d9204c93586457bbfd20b22c0631788",
     "GEONAMES_USERNAME": "kevandee",
     "db" : {
+        "dialect": "mysql",
         "host": "localhost",
-        "user": "achaika",
-        "database": "usof_backend",
+        "user": "chronos_admin",
+        "database": "chronos_api",
         "password": "securepass"
     },
     "jwt" : {

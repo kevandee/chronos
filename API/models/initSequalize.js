@@ -1,9 +1,10 @@
 const Sequelize = require('sequelize');
 const initModels = require('./sequelize/init-models');
+const {db} = require('../config.json');
 
-const sequelize = new Sequelize("chronos_api", "root", "f1wn661r222", {
-    dialect: "mysql",
-    host: "localhost",
+const sequelize = new Sequelize(db.database, db.user, db.password, {
+    dialect: db.dialect,
+    host: db.host,
     define: {
         timestamps: false
     }

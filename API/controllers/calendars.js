@@ -222,7 +222,7 @@ module.exports = {
 
         await events_calendars.save({event_id: newEvent.id, calendar_id: calendarId});
 
-        res.sendStatus(200);
+        res.json({id: newEvent.id});
     },
     
     async deleteCalendarEvent(req,res) {

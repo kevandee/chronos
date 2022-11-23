@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS users
     password VARCHAR(60) NOT NULL,
     full_name VARCHAR(255) NOT NULL,
     email VARCHAR(60) NOT NULL,
-    profile_picture VARCHAR(100) NOT NULL DEFAULT 'profile_pictures/default.png'
+    profile_picture VARCHAR(100) NOT NULL DEFAULT 'profile_pictures/default.png',
+    country CHAR(3) NOT NULL DEFAULT "UA"
 );
 
 CREATE TABLE IF NOT EXISTS calendars
@@ -35,7 +36,7 @@ CREATE TABLE IF NOT EXISTS events
     create_date TIMESTAMP,
     start_at TIMESTAMP NOT NULL,
     end_at TIMESTAMP NOT NULL,
-    type ENUM('arrangement', 'reminder', 'task'),
+    type ENUM('meeting', 'reminder', 'task') NOT NULL,
     color CHAR(8) default('#8a2be2'),
     FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE SET NULL
 );

@@ -90,7 +90,7 @@ module.exports = {
             return;
         }
 
-        const isAuthor = (await events.find({id: eventId})).author_id == req.user.id;
+        const isAuthor = (await events.find({id: eventId}))?.author_id == req.user.id;
         if (!isAuthor) {
             res.sendStatus(403);
             return;
@@ -103,7 +103,7 @@ module.exports = {
             res.status(500).json(newEvent);
             return;
         }
-
+        console.log(data);
         res.sendStatus(200);
     },
 

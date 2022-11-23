@@ -1,6 +1,7 @@
 {
     "port": 8000,
     "HOLIDAY_API_KEY": "0d9204c93586457bbfd20b22c0631788",
+    "GEONAMES_USERNAME": "kevandee",
     "db" : {
         "host": "localhost",
         "user": "achaika",

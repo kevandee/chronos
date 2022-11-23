@@ -35,14 +35,14 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: false
     },
-    type: {
-      type: DataTypes.ENUM('arrangement','reminder','task'),
-      allowNull: true
-    },
     color: {
       type: DataTypes.CHAR(8),
       allowNull: true,
       defaultValue: "_cp866\\'#8a2be2\\'"
+    },
+    type: {
+      type: DataTypes.ENUM('meeting','reminder','task'),
+      allowNull: true
     }
   }, {
     sequelize,

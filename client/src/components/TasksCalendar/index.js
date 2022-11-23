@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-import axios from "axios";
+import axios from "../../redux/axios";
 //import styled from "@emotion/styled";
 
 import FullCalendar from "@fullcalendar/react";
@@ -12,6 +12,9 @@ import styles from "./TasksCalendar.module.scss";
 
 import ModalWindowEvent from "../ModalWindowEvent/index";
 import { useOpenModal } from "../../hooks/useOpenModal";
+import { useSelector } from "react-redux";
+
+import { selectCurrentCalendar } from "../../redux/slices/calendarSlice";
 
 const TasksCalendar = () => {
   const [selectInfo, setSelectInfo] = useState();
@@ -19,7 +22,13 @@ const TasksCalendar = () => {
   const [weekday, setWeekday] = useState("");
   const [holidays, setHolidays] = useState("");
 
+  const [eventsData, setEventsData] = useState();
+  const [isLoadingEvents, setLoadingEvents] = useState(true);
+
   const modalInfoEvent = useOpenModal(false);
+  const currentCalendar = useSelector(selectCurrentCalendar);
+  
+  const calendarRef = React.createRef();
 
   useEffect(() => {
     setWeekday(
@@ -29,10 +38,38 @@ const TasksCalendar = () => {
     );
     getHoliday();
   }, []);
+  useEffect(() => {
+    if(currentCalendar.id) {
+      axios.get(`api/calendars/${currentCalendar.id}/events`).then(res => {
+        setEventsData(res.data);
+        setLoadingEvents(false);
+      }).catch(err => {
+        console.error(err);
+        alert('Error');
+      });
+    }
+  }, [currentCalendar]);
+
+  useEffect(() => {
+    if(!isLoadingEvents) {
+      const calendarApi = calendarRef.current.getApi();
+      eventsData.forEach(event => {
+        calendarApi.addEvent({
+          id: event.id,
+          title: event.title,
+          description: event.description,
+          start: event.start_at,
+          end: event.end_at,
+          backgroundColor: event.color,
+          event: event.type
+        });
+      });
+    }
+  }, [isLoadingEvents]);
 
   const getHoliday = async () => {
     try {
-      const res = await axios.get(`http://localhost:8000/api/holiday`);
+      const res = await axios.get(`/api/users/holiday`);
 
       if(res.data) {
         setHolidays(res.data.name);
@@ -54,6 +91,16 @@ const TasksCalendar = () => {
     console.log(selectInfo);
     modalInfoEvent.handleOpen();
   };
+
+  const resizeHandle = async (selectInfo) => {
+    await axios.patch(`/api/events/${selectInfo.event.id}`, {end_at: selectInfo.event.endStr});
+  };
+
+  const moveHandle = async (selectInfo) => {
+    // нужно захендлить ситуацию, когда чел пытается передвинуть ивент в прошлое)
+
+    await axios.patch(`/api/events/${selectInfo.event.id}`, {start_at: selectInfo.event.startStr, end_at: selectInfo.event.endStr});
+  }
 
   return (
     <section className={styles.events_container}>
@@ -92,6 +139,9 @@ const TasksCalendar = () => {
         scrollTime={moment().subtract("200", "minutes").format("HH:mm:ss")}
         select={selectHandle}
         eventClick={editHandle}
+        eventResize={resizeHandle}
+        eventDrop={moveHandle}
+        ref={calendarRef}
       />
       {/* </StyleWrapper> */}
     </section>

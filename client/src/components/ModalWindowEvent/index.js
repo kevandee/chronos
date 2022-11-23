@@ -11,10 +11,13 @@ import {
   IconButton,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
+import axios from "../../redux/axios";
 
 import styles from "./ModalWindowEvent.module.scss";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import DeleteIcon from '@mui/icons-material/Delete';
+import { selectCurrentCalendar } from "../../redux/slices/calendarSlice";
+import { useSelector } from "react-redux";
 
 const colors = [
   "#54A3FF",
@@ -32,6 +35,8 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
   const [color, setColor] = useState(0);
 
   const { register, handleSubmit } = useForm();
+
+  const currentCalendar = useSelector(selectCurrentCalendar);
 
   useEffect(() => {
     if (isEdit) {
@@ -62,10 +67,20 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
       
       const calendarApi = selectInfo.view.calendar;
 
-      //Add here axios to db
+      const resData = {
+        title: data.title,
+        description: data.description,
+        start_at: selectInfo.startStr,
+        end_at: selectInfo.endStr,
+        color: data.color,
+        type: data.event
+      }
 
+      //Add here axios to db
+      const res = await axios.post(`/api/calendars/${currentCalendar.id}/events`, resData);
+      
       calendarApi.addEvent({
-        id: 1,
+        id: res.data.id,
         title: data.title,
         description: data.description,
         start: selectInfo.startStr,
@@ -86,19 +101,31 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
     try {
       setTitle(selectInfo?.event?.title);
       setEventType(selectInfo?.event?._def.extendedProps.event);
-      //setColor(colors.indexOf(selectInfo?.event?._def.backgroundColor));
+
+
+      // fix, please))))
+      // setColor(colors.indexOf(selectInfo?.event?._def.backgroundColor));
 
       const calendarApi = selectInfo.view.calendar;
       //Update db with axios
+      const resData = {
+        title: data.title === '' ? title : data.title,
+        description: data.description === '' ? description : data.description,
+        color: data.color,
+        type: data.event === '' ? eventType : data.event
+      }
+      console.log("response", resData);
+
+      await axios.patch(`/api/events/${selectInfo.event.id}`, resData);
 
       const currentEvent = calendarApi.getEventById(selectInfo.event.id);
 
       if (currentEvent) {
         console.log(currentEvent._def.title);
-        currentEvent.setProp("title", data.title === '' ? title : data.title);
-        currentEvent.setExtendedProp("description", data.description === '' ? description : data.description);
-        currentEvent.setExtendedProp("eventType", data.event === '' ? eventType : data.event);
-        currentEvent.setProp("backgroundColor", data.color);
+        currentEvent.setProp("title", resData.title);
+        currentEvent.setExtendedProp("description", resData.description);
+        currentEvent.setExtendedProp("eventType", resData.event);
+        currentEvent.setProp("backgroundColor", resData.color);
       }
 
       handleClose();
@@ -107,10 +134,10 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
     }
   };
 
-  const deleteEvent = () => {
+  const deleteEvent = async () => {
     try{
         //delete from db
-
+        await axios.delete(`/api/events/${selectInfo.event.id}`);
         selectInfo.event.remove();
         setTitle('');
         setDescription('');
@@ -173,9 +200,9 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
               })}
               required
             >
-              <MenuItem value={10}>Event</MenuItem>
-              <MenuItem value={20}>Meeting</MenuItem>
-              <MenuItem value={30}>Reminder</MenuItem>
+              <MenuItem value={"task"}>Event</MenuItem>
+              <MenuItem value={"meeting"}>Meeting</MenuItem>
+              <MenuItem value={"reminder"}>Reminder</MenuItem>
             </Select>
           </FormControl>
           <div className={styles.colors}>

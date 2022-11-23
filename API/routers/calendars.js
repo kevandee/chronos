@@ -13,8 +13,8 @@ router.route('/:calendarId/members')
       .get(authenticateToken, controller.getCalendarMembers)
       .post(authenticateToken, controller.setCalendarMembers);
 router.post('/:calendarId/events',authenticateToken, controller.newCalendarEvent);
+router.get('/:calendarId/events',authenticateToken, controller.getCalendarEvents);
 router.route('/:calendarId/events/:eventId')
-      .get(authenticateToken, controller.getCalendarEvents)
       .delete(authenticateToken, controller.deleteCalendarEvent);
 
 module.exports = router;

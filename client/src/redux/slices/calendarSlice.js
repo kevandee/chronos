@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, createReducer } from '@reduxjs/toolkit';
 import axios from '../axios';
 
 export const fetchCalendars = createAsyncThunk('calendars/fetchCalendars', async (calendarId, {rejectWithValue}) => {
@@ -22,6 +22,7 @@ export const fetchCalendars = createAsyncThunk('calendars/fetchCalendars', async
 });
 
 const initialState = {
+    currentCalendar: {},
     calendars: {
         items: [],
         error: null,
@@ -47,12 +48,25 @@ const calendarsSlice = createSlice({
             state.calendars.items = null;
             state.error = action.payload;
             state.status = 'rejected';
-        },
-
+        }
+    },
+    reducers: {
+        setCurrentCalendar: {
+            reducer(state, action) {
+                console.log("payload", action.payload);
+                state.currentCalendar = action.payload;
+            },
+            prepare(calendar) {
+                return {
+                    payload: calendar
+                }
+            }
+        }
     }
 })
 
-// export const selectIsAuth = (state) => Boolean(state.auth.userToken);
+export const {setCurrentCalendar} = calendarsSlice.actions;
+export const selectCurrentCalendar = (state) => state.calendars.currentCalendar;
 // export const selectIsAuthMe = (state) => Boolean(state.auth.userInfo);
 
 export const calendarsReducer = calendarsSlice.reducer;

@@ -36,6 +36,11 @@ module.exports = function(sequelize, DataTypes) {
         model: 'calendars',
         key: 'id'
       }
+    },
+    country: {
+      type: DataTypes.CHAR(3),
+      allowNull: false,
+      defaultValue: "UA"
     }
   }, {
     sequelize,

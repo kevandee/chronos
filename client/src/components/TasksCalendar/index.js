@@ -26,7 +26,7 @@ const TasksCalendar = () => {
 
   const modalInfoEvent = useOpenModal(false);
   const currentCalendar = useSelector(selectCurrentCalendar);
-  
+
   const calendarRef = React.createRef();
 
   useEffect(() => {
@@ -38,21 +38,28 @@ const TasksCalendar = () => {
     getHoliday();
   }, []);
   useEffect(() => {
-    if(currentCalendar.id) {
-      axios.get(`api/calendars/${currentCalendar.id}/events`).then(res => {
-        setEventsData(res.data);
-        setLoadingEvents(false);
-      }).catch(err => {
-        console.error(err);
-        alert('Error');
-      });
+    if (currentCalendar?.id) {
+      console.log("isLoadingEvents 1");
+      setLoadingEvents(true);
+      axios
+        .get(`api/calendars/${currentCalendar.id}/events`)
+        .then((res) => {
+          setEventsData(res.data);
+          setLoadingEvents(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("Error");
+        });
     }
   }, [currentCalendar]);
 
   useEffect(() => {
-    if(!isLoadingEvents) {
+    if (!isLoadingEvents) {
       const calendarApi = calendarRef.current.getApi();
-      eventsData.forEach(event => {
+      calendarApi.removeAllEvents();
+
+      eventsData.forEach((event) => {
         calendarApi.addEvent({
           id: event.id,
           title: event.title,
@@ -60,7 +67,7 @@ const TasksCalendar = () => {
           start: event.start_at,
           end: event.end_at,
           backgroundColor: event.color,
-          event: event.type
+          event: event.type,
         });
       });
     }
@@ -70,7 +77,7 @@ const TasksCalendar = () => {
     try {
       const res = await axios.get(`/api/users/holiday`);
 
-      if(res.data) {
+      if (res.data) {
         setHolidays(res.data.name);
       }
     } catch (err) {
@@ -92,14 +99,19 @@ const TasksCalendar = () => {
   };
 
   const resizeHandle = async (selectInfo) => {
-    await axios.patch(`/api/events/${selectInfo.event.id}`, {end_at: selectInfo.event.endStr});
+    await axios.patch(`/api/events/${selectInfo.event.id}`, {
+      end_at: selectInfo.event.endStr,
+    });
   };
 
   const moveHandle = async (selectInfo) => {
     // нужно захендлить ситуацию, когда чел пытается передвинуть ивент в прошлое)
 
-    await axios.patch(`/api/events/${selectInfo.event.id}`, {start_at: selectInfo.event.startStr, end_at: selectInfo.event.endStr});
-  }
+    await axios.patch(`/api/events/${selectInfo.event.id}`, {
+      start_at: selectInfo.event.startStr,
+      end_at: selectInfo.event.endStr,
+    });
+  };
 
   return (
     <section className={styles.events_container}>

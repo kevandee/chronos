@@ -15,7 +15,7 @@ import axios from "../../redux/axios";
 
 import styles from "./ModalWindowEvent.module.scss";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 import { selectCurrentCalendar } from "../../redux/slices/calendarSlice";
 import { useSelector } from "react-redux";
 
@@ -64,7 +64,7 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
       setTitle("");
       setEventType("");
       setColor(0);
-      
+
       const calendarApi = selectInfo.view.calendar;
 
       const resData = {
@@ -73,12 +73,15 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
         start_at: selectInfo.startStr,
         end_at: selectInfo.endStr,
         color: data.color,
-        type: data.event
-      }
-
+        type: data.event,
+      };
+      console.log("current calendar", currentCalendar);
       //Add here axios to db
-      const res = await axios.post(`/api/calendars/${currentCalendar.id}/events`, resData);
-      
+      const res = await axios.post(
+        `/api/calendars/${currentCalendar.id}/events`,
+        resData
+      );
+
       calendarApi.addEvent({
         id: res.data.id,
         title: data.title,
@@ -86,7 +89,7 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
         start: selectInfo.startStr,
         end: selectInfo.endStr,
         backgroundColor: data.color,
-        event: data.event
+        event: data.event,
       });
 
       handleClose();
@@ -102,18 +105,17 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
       setTitle(selectInfo?.event?.title);
       setEventType(selectInfo?.event?._def.extendedProps.event);
 
-
       // fix, please))))
       // setColor(colors.indexOf(selectInfo?.event?._def.backgroundColor));
 
       const calendarApi = selectInfo.view.calendar;
       //Update db with axios
       const resData = {
-        title: data.title === '' ? title : data.title,
-        description: data.description === '' ? description : data.description,
+        title: data.title === "" ? title : data.title,
+        description: data.description === "" ? description : data.description,
         color: data.color,
-        type: data.event === '' ? eventType : data.event
-      }
+        type: data.event === "" ? eventType : data.event,
+      };
       console.log("response", resData);
 
       await axios.patch(`/api/events/${selectInfo.event.id}`, resData);
@@ -135,19 +137,18 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
   };
 
   const deleteEvent = async () => {
-    try{
-        //delete from db
-        await axios.delete(`/api/events/${selectInfo.event.id}`);
-        selectInfo.event.remove();
-        setTitle('');
-        setDescription('');
+    try {
+      //delete from db
+      await axios.delete(`/api/events/${selectInfo.event.id}`);
+      selectInfo.event.remove();
+      setTitle("");
+      setDescription("");
 
-        handleClose();
+      handleClose();
+    } catch (err) {
+      console.log(err);
     }
-    catch(err) {
-        console.log(err);
-    }
-  }
+  };
 
   const getTime = (date) => {
     const dateObj = new Date(date);
@@ -219,7 +220,7 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
                   {...register("color", {
                     onChange: (e) => {
                       setColor(colors.indexOf(e.target.value));
-                    }
+                    },
                   })}
                   required
                   defaultChecked={isEdit ? index === color : index === 0}
@@ -232,12 +233,20 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
               <AccessTimeIcon />
               {selectInfo && (
                 <span>
-                  {getTime(isEdit ? selectInfo.event.startStr : selectInfo.startStr)} - {getTime(isEdit ? selectInfo.event.endStr : selectInfo.endStr)}
+                  {getTime(
+                    isEdit ? selectInfo.event.startStr : selectInfo.startStr
+                  )}{" "}
+                  -{" "}
+                  {getTime(
+                    isEdit ? selectInfo.event.endStr : selectInfo.endStr
+                  )}
                 </span>
               )}
             </div>
             {isEdit && (
-                <IconButton onClick={deleteEvent}><DeleteIcon sx={{ color: '#ff674f'}}/></IconButton>
+              <IconButton onClick={deleteEvent}>
+                <DeleteIcon sx={{ color: "#ff674f" }} />
+              </IconButton>
             )}
             <Button
               variant="contained"

@@ -12,20 +12,41 @@ function initModels(sequelize) {
   var users = _users(sequelize, DataTypes);
   var users_calendars = _users_calendars(sequelize, DataTypes);
 
-  events_calendars.belongsTo(calendars, { as: "calendar", foreignKey: "calendar_id"});
-  calendars.hasMany(events_calendars, { as: "events_calendars", foreignKey: "calendar_id"});
-  users.belongsTo(calendars, { as: "default_calendar", foreignKey: "default_calendar_id"});
-  calendars.hasMany(users, { as: "users", foreignKey: "default_calendar_id"});
-  users_calendars.belongsTo(calendars, { as: "calendar", foreignKey: "calendar_id"});
-  calendars.hasMany(users_calendars, { as: "users_calendars", foreignKey: "calendar_id"});
-  events_calendars.belongsTo(events, { as: "event", foreignKey: "event_id"});
-  events.hasMany(events_calendars, { as: "events_calendars", foreignKey: "event_id"});
-  calendars.belongsTo(users, { as: "author", foreignKey: "author_id"});
-  users.hasMany(calendars, { as: "calendars", foreignKey: "author_id"});
-  events.belongsTo(users, { as: "author", foreignKey: "author_id"});
-  users.hasMany(events, { as: "events", foreignKey: "author_id"});
-  users_calendars.belongsTo(users, { as: "user", foreignKey: "user_id"});
-  users.hasMany(users_calendars, { as: "users_calendars", foreignKey: "user_id"});
+  events_calendars.belongsTo(calendars, {
+    as: "calendar",
+    foreignKey: "calendar_id",
+  });
+  calendars.hasMany(events_calendars, {
+    as: "events_calendars",
+    foreignKey: "calendar_id",
+  });
+  users.belongsTo(calendars, {
+    as: "default_calendar",
+    foreignKey: "default_calendar_id",
+  });
+  calendars.hasMany(users, { as: "users", foreignKey: "default_calendar_id" });
+  users_calendars.belongsTo(calendars, {
+    as: "calendar",
+    foreignKey: "calendar_id",
+  });
+  calendars.hasMany(users_calendars, {
+    as: "users_calendars",
+    foreignKey: "calendar_id",
+  });
+  events_calendars.belongsTo(events, { as: "event", foreignKey: "event_id" });
+  events.hasMany(events_calendars, {
+    as: "events_calendars",
+    foreignKey: "event_id",
+  });
+  calendars.belongsTo(users, { as: "author", foreignKey: "author_id" });
+  users.hasMany(calendars, { as: "calendars", foreignKey: "author_id" });
+  events.belongsTo(users, { as: "author", foreignKey: "author_id" });
+  users.hasMany(events, { as: "events", foreignKey: "author_id" });
+  users_calendars.belongsTo(users, { as: "user", foreignKey: "user_id" });
+  users.hasMany(users_calendars, {
+    as: "users_calendars",
+    foreignKey: "user_id",
+  });
 
   return {
     calendars,

@@ -4,9 +4,9 @@ import { Alert } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchLogin } from "../../redux/slices/authSlice";
+import { fetchSignup } from "../../redux/slices/authSlice";
 
-const Login = () => {
+const Registration = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -15,24 +15,25 @@ const Login = () => {
   const { register, handleSubmit } = useForm({
     defaultValues: {
       login: "",
+      email: "",
       password: "",
     },
     mode: "onChange",
   });
 
   const onSubmit = async (values) => {
-    dispatch(fetchLogin(values));
+    dispatch(fetchSignup(values));
   };
 
   React.useEffect(() => {
     if (userInfo) {
-      navigate("/");
+      navigate("/login");
     }
   }, [userInfo]);
 
   return (
     <main>
-      <h1>Login</h1>
+      <h1>Registration</h1>
       {error && <Alert severity="error">{error}</Alert>}
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -47,16 +48,21 @@ const Login = () => {
           type="text"
           {...register("login", { required: "Input username" })}
         />
+        <label htmlFor="">E-mail</label>
+        <input
+          type="email"
+          {...register("email", { required: "Input e-mail" })}
+        />
         <label htmlFor="">Password</label>
         <input
           type="password"
           {...register("password", { required: "Input password" })}
         />
-        <button type="submit">Login</button>
-        <Link href="/signup">Sign up</Link>
+        <button type="submit">Sign up</button>
+        <Link href="/login">Sign in</Link>
       </form>
     </main>
   );
 };
 
-export default Login;
+export default Registration;

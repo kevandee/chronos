@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import axios from "../../redux/axios";
-//import styled from "@emotion/styled";
 
 import FullCalendar from "@fullcalendar/react";
 import daygridPlugin from "@fullcalendar/daygrid";
@@ -114,7 +113,6 @@ const TasksCalendar = () => {
         <span className={styles.date}>{weekday}</span>
         {holidays && <span className={styles.holiday}>{holidays}</span>}
       </div>
-      {/* <StyleWrapper> */}
       <FullCalendar
         editable={true}
         selectable={true}
@@ -143,7 +141,6 @@ const TasksCalendar = () => {
         eventDrop={moveHandle}
         ref={calendarRef}
       />
-      {/* </StyleWrapper> */}
     </section>
   );
 };

@@ -21,7 +21,15 @@ code {
 //CALENDAR STYLES
 
 .fc {
-  border: none !important;
+  border: 1px solid #cecece;
+  border-radius: 20px !important;
+  border-collapse: collapse !important;
+  padding-bottom: 25px;
+  padding-top: 25px;
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+  display: none;
 }
 
 .fc .fc-timegrid-slot {
@@ -88,4 +96,31 @@ code {
 .fc-timegrid-event.fc-event-mirror, .fc-timegrid-more-link {
   border-radius: 10px;
   border: none;
+}
+
+.fc .fc-scrollgrid-liquid {
+  border: none !important;
+}
+
+// SCROLL BAR
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

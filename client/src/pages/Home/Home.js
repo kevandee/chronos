@@ -8,7 +8,7 @@ import { fetchCalendars, setCurrentCalendar } from '../../redux/slices/calendarS
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 
-const Main = () => {
+const Home = () => {
     const dispatch = useDispatch();
     const {calendars} = useSelector((state) => state.calendars);
     const isCalendarsLoading = calendars.status === 'loading';
@@ -44,4 +44,4 @@ const Main = () => {
     )
 }
 
-export default Main;
+export default Home;

@@ -10,8 +10,12 @@ import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAuthMe, selectIsAuthMe } from './redux/slices/authSlice';
 
-import Main from './pages/Main/Main';
+import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
+import Signup from './pages/Signup/Signup';
+import ResetPassword from './pages/ResetPassword/ResetPassword';
+import ChangePassword from './pages/ChangePassword/ChangePassword';
+import ConfirmEmail from './pages/ConfirmEmail/ConfirmEmail';
 
 const theme = createTheme({
   palette: {
@@ -24,7 +28,7 @@ const theme = createTheme({
 const router = createBrowserRouter([
   {
       path: "/",
-      element: <Main />
+      element: <Home />
   },
   // {
   //     path: '/questions',
@@ -33,23 +37,23 @@ const router = createBrowserRouter([
   {
       path: '/login',
       element: <Login />
-  }
-  // {
-  //     path: '/signup',
-  //     element: <Signup />
-  // },
-  // {
-  //     path: '/reset-password',
-  //     element: <ResetPassword />
-  // },
-  // {
-  //     path: '/confirm/:token',
-  //     element: <ConfirmEmail />
-  // },
-  // {
-  //     path: '/reset-password/:token',
-  //     element: <ChangePassword />
-  // },
+  },
+  {
+      path: '/signup',
+      element: <Signup />
+  },
+  {
+      path: '/reset-password',
+      element: <ResetPassword />
+  },
+  {
+      path: '/confirm/:token',
+      element: <ConfirmEmail />
+  },
+  {
+      path: '/reset-password/:token',
+      element: <ChangePassword />
+  },
   // {
   //     path: '/questions/:id',
   //     element: <FullPost />

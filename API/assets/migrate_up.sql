@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS calendars
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(256) NOT NULL,
-    author_id INT NOT NULL,
+    author_id INT,
     create_date TIMESTAMP,
     FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE SET NULL
 );

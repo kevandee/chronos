@@ -121,10 +121,12 @@ const TasksCalendar = () => {
         selectInfo={selectInfo}
         isEdit={isEdit}
       />
+      
       <div className={styles.heading}>
         <span className={styles.date}>{weekday}</span>
         {holidays && <span className={styles.holiday}>{holidays}</span>}
       </div>
+
       <FullCalendar
         editable={true}
         selectable={true}

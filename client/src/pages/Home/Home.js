@@ -4,6 +4,8 @@ import { Container } from "@mui/material";
 
 import SideBarMenu from "../../components/SideBarMenu/index";
 import TasksCalendar from "../../components/TasksCalendar";
+import CalendarPicker from "../../components/CalendarPicker";
+
 import {
   fetchCalendars,
   setCurrentCalendar,
@@ -65,6 +67,7 @@ const Home = () => {
       >
         <SideBarMenu />
         <TasksCalendar />
+        <CalendarPicker />
       </Container>
     </main>
   );

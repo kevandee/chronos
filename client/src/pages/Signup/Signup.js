@@ -13,7 +13,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import BadgeIcon from '@mui/icons-material/Badge';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-//import { fetchSignup } from '../../redux/slices/authSlice';
+import { fetchSignup } from '../../redux/slices/authSlice';
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -21,11 +21,11 @@ const Signup = () => {
 
     const { userInfo, error } = useSelector((state) => state.auth);
 
-    // React.useEffect(() => {
-    //     if (userInfo) {
-    //       navigate('/questions');
-    //     }
-    // }, [navigate, userInfo])
+    React.useEffect(() => {
+        if (userInfo) {
+        navigate('/');
+        }
+    }, [navigate, userInfo])
 
     const { register, handleSubmit, formState: { errors }, watch } = useForm({
         defaultValues: {
@@ -40,12 +40,12 @@ const Signup = () => {
 
     const onSubmit = async (values) => {
         console.log(values);
-        //dispatch(fetchSignup(values));
+        dispatch(fetchSignup(values));
     }
 
     return (
         <main>
-            <section section id={styles.bg}>
+            <section id={styles.bg}>
                 <div className={styles.content_box}>
                     <IconButton onClick={() => navigate(-1)} aria-label='go back' className={styles.backBtn}><ArrowBackIcon/></IconButton>
                     <div className={styles.heading}>
@@ -59,7 +59,7 @@ const Signup = () => {
                                 <div className={styles.form}>
                                     <label htmlFor='username'>Username</label>
                                     <div className={styles.field}>
-                                        <input type='text' id='username' required {...register('login')}/>
+                                        <input type='text' id='username' required minLength={3} {...register('login')}/>
                                         <PersonIcon></PersonIcon>
                                     </div>
                                 </div>

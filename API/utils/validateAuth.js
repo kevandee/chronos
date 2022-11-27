@@ -12,16 +12,16 @@ function checkEmail(email) {
 }
 
 function validateRegisterData(data) {
-  if (!data.login || data.login.length < 5) {
+  if (!data.login || data.login.length < 3) {
     return err_codes.LOGIN;
   }
   if (!data.password || data.password.length < 8) {
     return err_codes.PASSWORD;
   }
   data.password = hashPassword(data.password);
-  if (!data.full_name) {
-    data.full_name = data.login;
-  }
+  // if (!data.full_name) {
+  //   data.full_name = data.login;
+  // }
   if (!data.email || !checkEmail(data.email)) {
     return err_codes.EMAIL;
   }

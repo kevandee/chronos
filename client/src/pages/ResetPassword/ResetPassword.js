@@ -10,7 +10,7 @@ import background from '../../assets/images/ResetBG.png';
 import EmailIcon from '@mui/icons-material/Email';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-//import { fetchResetPassword } from '../../redux/slices/authSlice';
+import { fetchResetPassword } from '../../redux/slices/authSlice';
 
 const ResetPassword = () => {
     const navigate = useNavigate();
@@ -27,7 +27,7 @@ const ResetPassword = () => {
 
     const onSubmit = async (values) => {
         console.log(values);
-        //dispatch(fetchResetPassword(values));
+        dispatch(fetchResetPassword(values));
     }
 
     return(

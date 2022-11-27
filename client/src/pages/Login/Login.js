@@ -1,6 +1,6 @@
 import React from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Alert, IconButton, Button } from '@mui/material'
+import { useNavigate } from 'react-router-dom';
+import { Alert, IconButton, Button, Link } from '@mui/material'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -28,6 +28,7 @@ const Login = () => {
     });
 
     const onSubmit = async (values) => {
+        console.log(values);
         dispatch(fetchLogin(values));
     }
 
@@ -35,20 +36,10 @@ const Login = () => {
         if (userInfo) {
             navigate('/');
         }
-    }, [userInfo])
+    }, [userInfo]);
 
     return (
         <main>
-            {/* <h1>Login</h1>
-            {error && <Alert severity="error">{error}</Alert>}
-            <form onSubmit={handleSubmit(onSubmit)} style={{display: "flex", flexDirection: "column", width: "min-content"}}>
-                <label htmlFor="">Username</label>
-                <input type='text' {...register('login', { required: 'Input username' })}/>
-                <label htmlFor="">Password</label>
-                <input type='password' {...register('password', { required: 'Input password' })}/>
-                <button type='submit'>Login</button>
-                <Link href='/signup'>Sign up</Link>
-            </form> */}
             <section id={styles.bg}>
                 <div className={styles.content_box}>
                     <IconButton onClick={() => navigate(-1)} aria-label='go back' className={styles.backBtn}><ArrowBackIcon/></IconButton>

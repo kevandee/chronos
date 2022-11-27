@@ -9,8 +9,10 @@ export const fetchLogin = createAsyncThunk(
   async (params, { rejectWithValue }) => {
     try {
       const { data } = await axios.post("/api/auth/login", params);
+      console.log(data);
       return data;
     } catch (error) {
+      console.log(error);
       return rejectWithValue(error.response.data.error);
     }
   }
@@ -23,7 +25,8 @@ export const fetchSignup = createAsyncThunk(
       const { data } = await axios.post("/api/auth/register", params);
       return data;
     } catch (error) {
-      return rejectWithValue(error.response.data.error);
+      console.log(error);
+      return rejectWithValue(error.response.data.message);
     }
   }
 );

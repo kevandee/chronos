@@ -1,13 +1,13 @@
 import React from "react";
 import Cookies from "js-cookie";
+import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import {
   createBrowserRouter,
   RouterProvider,
   useNavigate,
 } from "react-router-dom";
 
-import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
 import { fetchAuthMe, selectIsAuthMe } from "./redux/slices/authSlice";
 
 import Home from './pages/Home/Home';

@@ -11,9 +11,9 @@ import styles from "./TasksCalendar.module.scss";
 
 import ModalWindowEvent from "../ModalWindowEvent/index";
 import { useOpenModal } from "../../hooks/useOpenModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { selectCurrentCalendar } from "../../redux/slices/calendarSlice";
+import { selectCurrentCalendar, setCurrentCalendar } from "../../redux/slices/calendarSlice";
 
 const TasksCalendar = () => {
   const [selectInfo, setSelectInfo] = useState();
@@ -27,39 +27,58 @@ const TasksCalendar = () => {
   const modalInfoEvent = useOpenModal(false);
   const currentCalendar = useSelector(selectCurrentCalendar);
 
+  const dispatch = useDispatch();
   const calendarRef = React.createRef();
+  const date = new Date();
+    
+  const defaultValue = {
+      year: date.getFullYear(),
+      month: date.getMonth() + 1,
+      day: date.getDate(),
+  };
 
   useEffect(() => {
-    setWeekday(
-      `${new Date().toLocaleString("en-us", {
-        weekday: "long",
-      })}, ${new Date().getDate()}`
-    );
+    if(!currentCalendar.day) {
+      setWeekday(
+        `${date.toLocaleString("en-us", {
+          weekday: "long",
+        })}, ${date.getDate()}`
+      );
+    }
+    else {
+      const calendarApi = calendarRef.current.getApi();
+      calendarApi.gotoDate(currentCalendar.day.toISOString());
+      setWeekday(
+        `${currentCalendar.day.toLocaleString("en-us", {
+          weekday: "long",
+        })}, ${currentCalendar.day.getDate()}`
+      );
+    }
     getHoliday();
-  }, []);
+  }, [currentCalendar.id, currentCalendar.day]);
   useEffect(() => {
-    if (currentCalendar?.id) {
-      console.log("isLoadingEvents 1");
-      setLoadingEvents(true);
+    if (currentCalendar.id) {
+      // setLoadingEvents(true);
       axios
-        .get(`api/calendars/${currentCalendar.id}/events`)
+        .get(`api/calendars/${currentCalendar.id}/events?date=${(new Date(`${defaultValue.year}-${defaultValue.month}-${defaultValue.day}`).toISOString())}`)
         .then((res) => {
-          setEventsData(res.data);
-          setLoadingEvents(false);
+          // setEventsData(res.data);
+          // setLoadingEvents(false);
+          dispatch(setCurrentCalendar({...(currentCalendar), events: res.data}));
         })
         .catch((err) => {
           console.error(err);
           alert("Error");
         });
     }
-  }, [currentCalendar]);
+  }, [currentCalendar.id]);
 
   useEffect(() => {
-    if (!isLoadingEvents) {
+    if (currentCalendar.events) {
       const calendarApi = calendarRef.current.getApi();
       calendarApi.removeAllEvents();
 
-      eventsData.forEach((event) => {
+      currentCalendar.events.forEach((event) => {
         calendarApi.addEvent({
           id: event.id,
           title: event.title,
@@ -71,7 +90,7 @@ const TasksCalendar = () => {
         });
       });
     }
-  }, [isLoadingEvents]);
+  }, [currentCalendar.id, currentCalendar.events]);
 
   const getHoliday = async () => {
     try {

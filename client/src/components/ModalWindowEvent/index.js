@@ -16,8 +16,8 @@ import axios from "../../redux/axios";
 import styles from "./ModalWindowEvent.module.scss";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { selectCurrentCalendar } from "../../redux/slices/calendarSlice";
-import { useSelector } from "react-redux";
+import { selectCurrentCalendar, setCurrentCalendar } from "../../redux/slices/calendarSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const colors = [
   "#54A3FF",
@@ -29,6 +29,8 @@ const colors = [
 ];
 
 const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
+  const dispatch = useDispatch();
+  
   const [eventType, setEventType] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -92,6 +94,7 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
         event: data.event,
       });
 
+      // dispatch(setCurrentCalendar({...(currentCalendar), events: [...currentCalendar.events, res.data]}));
       handleClose();
       //reset({ title: "", event: "" });
       setEventType("");

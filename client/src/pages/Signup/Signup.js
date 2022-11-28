@@ -33,7 +33,7 @@ const Signup = () => {
             password: '',
             passwordRepeat: '',
             email: '',
-            fullname: ''
+            full_name: ''
         },
         mode: 'onChange'
     })
@@ -67,7 +67,7 @@ const Signup = () => {
                                     <label htmlFor='name'>Full Name</label>
                                     <div className={styles.field}>
                                         <input type='text' id='name' required
-                                            {...register('fullname', {
+                                            {...register('full_name', {
                                                 pattern: {
                                                     value: /^([\w]{2,})+\s+([\w\s]{2,})+$/i,
                                                     message: 'Please, enter your real name'

@@ -6,6 +6,7 @@ const {
   events,
   events_calendars,
 } = require("./initSequalize");
+const {Op} = require('sequelize');
 
 class Calendars extends Model {
   constructor() {
@@ -82,7 +83,35 @@ class Calendars extends Model {
     });
   }
 
-  async getCalendarEvents(calendarId) {
+  async getCalendarEvents(calendarId, date, limit) {
+    if (date) {
+      const start = new Date(date);
+      const end = new Date(start.getTime() + 86400000);
+      return await events.findAll({
+        attributes: { exclude: ["author_id"] },
+        where: {
+          start_at: {
+            [Op.between]: [start.toISOString(), end.toISOString()]
+          }
+        },
+        include: [
+          {
+            model: users,
+            attributes: ["id", "login", "full_name", "profile_picture"],
+            as: "author",
+            required: true,
+          },
+          {
+            model: events_calendars,
+            as: "events_calendars",
+            where: { calendar_id: calendarId },
+            attributes: [],
+            raw: true,
+          },
+        ],
+        ...(limit ? {limit: parseInt(limit)} : {}),
+      }); 
+    }
     return await events.findAll({
       attributes: { exclude: ["author_id"] },
       include: [
@@ -100,6 +129,7 @@ class Calendars extends Model {
           raw: true,
         },
       ],
+      ...(limit ? {limit: parseInt(limit)} : {}),
     });
   }
 }

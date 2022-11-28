@@ -1,13 +1,13 @@
 import React from "react";
 import Cookies from "js-cookie";
-import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
 import {
   createBrowserRouter,
   RouterProvider,
   useNavigate,
 } from "react-router-dom";
 
+import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchAuthMe, selectIsAuthMe } from "./redux/slices/authSlice";
 
 import Home from './pages/Home/Home';
@@ -89,7 +89,12 @@ function App() {
 
   const isAuth = useSelector(selectIsAuthMe);
   console.log("isAuth", isAuth);
-
+  React.useEffect(() => {
+    if(!isAuth && !arr.includes(window.location.pathname)) {
+      // console.log(window.location);
+      window.location = '/login';
+    }
+  }, [isAuth]);
   React.useEffect(() => {
     if (userToken) {
       dispatch(fetchAuthMe(userToken));

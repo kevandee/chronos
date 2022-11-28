@@ -199,6 +199,7 @@ module.exports = {
 
   async getCalendarEvents(req, res) {
     const { calendarId } = req.params;
+    const {date, limit} = req.query;
     if (isNaN(parseInt(calendarId))) {
       res.sendStatus(400);
       return;
@@ -210,7 +211,13 @@ module.exports = {
       return;
     }
 
-    let events = await calendars.getCalendarEvents(calendarId);
+    let events;
+    if (!isNaN(parseInt(limit))) {
+      events = await calendars.getCalendarEvents(calendarId, date, limit);
+    }
+    else {
+      events = await calendars.getCalendarEvents(calendarId, date);
+    }
     res.json(events);
   },
 

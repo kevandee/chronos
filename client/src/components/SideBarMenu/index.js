@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Typography, Button, Link, Avatar } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -30,6 +30,13 @@ const SideBarMenu = () => {
       )
     );
   };
+
+  const fullnameRef = useRef();
+
+  useEffect(() => {
+    if (userInfo && fullnameRef)
+      fullnameRef.current.innerHTML = userInfo?.full_name?.split(" ")?.join("<br/>")
+  }, [userInfo, fullnameRef])
 
   return (
     <section className={styles.sidebar_container}>
@@ -70,7 +77,7 @@ const SideBarMenu = () => {
               {calendars.items &&
                 userInfo &&
                 calendars.items.map((calendar) => {
-                  if (calendar.id != userInfo?.default_calendar_id) {
+                  if (calendar.id != userInfo.default_calendar_id) {
                     return (
                       <tr key={calendar.id + "-key"}>
                         <td>
@@ -111,7 +118,7 @@ const SideBarMenu = () => {
           src="img"
           sx={{ width: "50px", height: "50px" }}
         ></Avatar>
-        <span>{userInfo?.full_name?.split(" ")?.join("<br/>")}</span>
+        <span ref={fullnameRef}></span>
       </div>
     </section>
   );

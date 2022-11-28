@@ -100,8 +100,7 @@ module.exports = {
       role: userData.role,
     });
     res.cookie("token", token);
-    res.cookie("id", userData.id);
-    res.sendStatus(200);
+    res.status(200).json(userData);
   },
 
   logout(req, res) {
@@ -180,6 +179,7 @@ module.exports = {
     try {
       const info = await authenticateLoginToken(req.cookies.token);
       if (!info) {
+        res.clearCookie("token");
         return res.status(401).send("Access denied");
       }
       const user = await users.find({ id: info.id });

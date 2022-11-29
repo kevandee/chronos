@@ -94,10 +94,26 @@ const TasksCalendar = () => {
 
   const getHoliday = async () => {
     try {
-      const res = await axios.get(`/api/users/holiday`);
+      if(!currentCalendar.day) {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
 
-      if (res.data) {
-        setHolidays(res.data.name);
+        const res = await axios.get(`/api/users/holiday?year=${year}&month=${month}&day=${day}`);
+        if (res.data) {
+          setHolidays(res.data.name);
+        }
+      }
+      else {
+        const year = currentCalendar.day.getUTCFullYear();
+        const month = currentCalendar.day.getUTCMonth();
+        const day = currentCalendar.day.getUTCDate();
+
+        const res = await axios.get(`/api/users/holiday?year=${year}&month=${month}&day=${day}`);
+        if (res.data) {
+          setHolidays(res.data.name);
+        }
       }
     } catch (err) {
       console.log(err);

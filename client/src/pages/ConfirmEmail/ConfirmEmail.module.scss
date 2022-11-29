@@ -2,6 +2,9 @@
 @import '../Login/Login.module.scss';
 
 .content_box {
+    display: flex;
+    flex-direction: column;
+
     .error {
         display: flex;
         flex-direction: row;
@@ -19,5 +22,13 @@
             line-height: 39px;
             color: $main-dark-color;
         }
+    }
+
+    p {
+        font-weight: 700;
+        font-size: 32px;
+        line-height: 39px;
+        color: $main-dark-color;
+        text-align: center;
     }
 }

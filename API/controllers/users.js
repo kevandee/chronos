@@ -20,16 +20,14 @@ module.exports = {
 
   async getHoliday(req, res) {
     try {
+      console.log(req.query);
       const { country } = await users.find({ id: req.user.id });
-      const date = new Date();
-      const year = date.getFullYear();
-      const month = date.getMonth();
-      const day = date.getDate();
+      const { year, month, day } = req.query;
 
       const response = await fetch(
-        `https://holidays.abstractapi.com/v1/?api_key=${HOLIDAY_API_KEY}&country=${country}&year=${year}&month=${
-          month + 1
-        }&day=${day}`
+        `https://holidays.abstractapi.com/v1/?api_key=${HOLIDAY_API_KEY}&country=${country}&year=${+year}&month=${
+          +month + 1
+        }&day=${+day}`
       );
       const data = await response.json();
 

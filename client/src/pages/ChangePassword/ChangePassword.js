@@ -12,7 +12,7 @@ import IllustrationError from '../../assets/images/IllustrationError.png';
 
 import LockIcon from '@mui/icons-material/Lock';
 
-//import { fetchCheckToken, fetchChangePassword } from '../../redux/slices/authSlice';
+import { fetchCheckToken, fetchChangePassword } from '../../redux/slices/authSlice';
 
 const ChangePassword = () => {
     const navigate = useNavigate();
@@ -31,12 +31,13 @@ const ChangePassword = () => {
 
     const onSubmit = async (values) => {
         console.log(values);
-        //dispatch(fetchChangePassword({token, values}));
+        dispatch(fetchChangePassword({token, values}));
+        navigate('/login');
     }
 
-    // React.useEffect(() => {
-    //     dispatch(fetchCheckToken(token));
-    // }, [])
+    React.useEffect(() => {
+        dispatch(fetchCheckToken(token));
+    }, [])
     
 
     return (
@@ -44,7 +45,7 @@ const ChangePassword = () => {
             <section id={styles.bg}>
                 <div className={styles.content_box}>
                     {error 
-                        ?  <><img src={IllustrationError} alt='Illustration'/><p>{error}</p></>
+                        ?  <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}><img src={IllustrationError} alt='Illustration' style={{ userSelect: 'none' }}/><p>{error}</p></div>
                         :<div className={styles.error}>
                             {userInfo
                                 ? <div className={styles.updated}><img /*src={illustration}*/ alt='Illustration'/><p>{userInfo}</p><Link href='/login'>Go to login</Link></div>
@@ -62,7 +63,7 @@ const ChangePassword = () => {
                                             <div className={styles.form}>
                                                 <label htmlFor='password'>Password</label>
                                                 <div className={styles.field}>
-                                                    <input type='password' id='password' required
+                                                    <input type='password' id='password' required minLength={8}
                                                         {...register('password', {
                                                             pattern: {
                                                                 value: /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,

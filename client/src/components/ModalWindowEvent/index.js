@@ -16,7 +16,7 @@ import axios from "../../redux/axios";
 import styles from "./ModalWindowEvent.module.scss";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { selectCurrentCalendar, setCurrentCalendar } from "../../redux/slices/calendarSlice";
+import { selectCurrentCalendar } from "../../redux/slices/calendarSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const colors = [

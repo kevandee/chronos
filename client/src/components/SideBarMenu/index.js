@@ -15,12 +15,8 @@ import { setCurrentCalendar } from "../../redux/slices/calendarSlice";
 
 const SideBarMenu = () => {
   const dispatch = useDispatch();
-  const { userInfo, error } = useSelector((state) => state.auth);
-  const navigate = useNavigate();
+  const { userInfo } = useSelector((state) => state.auth);
   const calendars = useSelector((state) => state.calendars.calendars);
-
-  const [selectInfo, setSelectInfo] = useState();
-  const [isEdit, setIsEdit] = useState(false);
   const modalInfoCalendar = useOpenModal(false);
 
   const _setCurrentCalendar = (id) => {
@@ -43,8 +39,6 @@ const SideBarMenu = () => {
       <ModalWindowCalendar
         open={modalInfoCalendar.isOpen}
         handleClose={modalInfoCalendar.handleClose}
-        selectInfo={selectInfo}
-        isEdit={isEdit}
       />
       <div className={styles.logo_container}>
         <Typography variant="h1" className={styles.logo}>

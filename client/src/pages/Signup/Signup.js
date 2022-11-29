@@ -23,7 +23,7 @@ const Signup = () => {
 
     React.useEffect(() => {
         if (userInfo) {
-        navigate('/');
+            navigate('/login');
         }
     }, [navigate, userInfo])
 
@@ -41,6 +41,7 @@ const Signup = () => {
     const onSubmit = async (values) => {
         console.log(values);
         dispatch(fetchSignup(values));
+        navigate('/login');
     }
 
     return (

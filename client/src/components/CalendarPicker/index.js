@@ -94,6 +94,7 @@ const CalendarPicker = () => {
     const date = new Date();
     
     const [closeEvents, setCloseEvents] = useState([]);
+    const [events, setEvents] = useState([]);
 
     const defaultValue = {
         year: date.getFullYear(),
@@ -130,6 +131,26 @@ const CalendarPicker = () => {
         }
     }, [currentCalendar.id, currentCalendar.events]);
 
+    useEffect(() => {
+        if (currentCalendar.id) {
+            axios.get(`/api/calendars/${currentCalendar.id}/events`)
+            .then((res) => {
+                let eventsArr = [];
+                res.data.map((el, index) => {
+                    let date = new Date(res.data[index].start_at);
+                    let obj = { year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, day: date.getUTCDate(), className: styles.orangeDay}
+                    eventsArr.push(obj);
+                })
+                setEvents(eventsArr);
+                console.log(eventsArr);
+            })
+            .catch((err) => {
+                console.error(err);
+                alert("Error");
+            });
+        }
+    }, [currentCalendar.id])
+
     return(
         <section className={styles.calendarPicker}>
             <Calendar
@@ -138,10 +159,7 @@ const CalendarPicker = () => {
             locale={myCustomLocale}
             colorPrimary="#E07A5F"
             calendarClassName={styles.customCalendar}
-            customDaysClassName={[
-                // here we add some CSS classes
-                { year: 2022, month: 11, day: 4, className: styles.purpleDay },
-              ]}
+            customDaysClassName={events}
             />
 
             <div className={styles.closeEvents}>

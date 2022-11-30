@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
-import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import { useDispatch, useSelector } from "react-redux";
+import { Button } from "@mui/material";
 import { Calendar } from "react-modern-calendar-datepicker";
 
 import styles from '../CalendarPicker/CalendarPicker.module.scss';
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
+import SettingsIcon from "@mui/icons-material/Settings";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import { Button } from "@mui/material";
+
+import ModalWindowSettings from '../ModalWindowSettings/index';
+import { useOpenModal } from "../../hooks/useOpenModal";
 import { selectCurrentCalendar, setCurrentCalendar } from "../../redux/slices/calendarSlice";
-import { useDispatch, useSelector } from "react-redux";
 import axios from "../../redux/axios";
 
 const myCustomLocale = {
@@ -95,6 +99,7 @@ const CalendarPicker = () => {
     
     const [closeEvents, setCloseEvents] = useState([]);
     const [events, setEvents] = useState([]);
+    const modalInfoCalendar = useOpenModal(false);
 
     const defaultValue = {
         year: date.getFullYear(),
@@ -153,6 +158,10 @@ const CalendarPicker = () => {
 
     return(
         <section className={styles.calendarPicker}>
+            <ModalWindowSettings
+            open={modalInfoCalendar.isOpen}
+            handleClose={modalInfoCalendar.handleClose}
+            />
             <Calendar
             value={selectedDay}
             onChange={onChange}
@@ -172,22 +181,8 @@ const CalendarPicker = () => {
                     </div>
                 </div>
                 )}
-              {/* <div className={styles.event} style={{ backgroundColor: 'rgba(228, 231, 36, 0.7)'}}>
-                <span className={styles.taskTitle}>Task 2</span>
-                <div className={styles.time}>
-                    <AccessTimeIcon></AccessTimeIcon>
-                    <span>12:30 - 14:15</span>
-                </div>
-              </div>
-              <div className={styles.event} style={{ backgroundColor: 'rgba(52, 73, 94, 0.7)'}}>
-                <span className={styles.taskTitle}>Task 3</span>
-                <div className={styles.time}>
-                    <AccessTimeIcon></AccessTimeIcon>
-                    <span>12:30 - 14:15</span>
-                </div>
-              </div> */}
             </div>
-            <Button variant='contained' className={styles.addBtn}>New Event</Button>
+            <Button variant='contained' className={styles.addBtn} onClick={() => modalInfoCalendar.handleOpen()}><SettingsIcon />Settings</Button>
         </section>
     )
 }

@@ -129,7 +129,7 @@ const TasksCalendar = () => {
   const editHandle = (selectInfo) => {
     setIsEdit(true);
     setSelectInfo(selectInfo);
-    console.log(selectInfo);
+    //console.log(selectInfo);
     modalInfoEvent.handleOpen();
   };
 

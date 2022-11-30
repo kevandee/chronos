@@ -4,24 +4,30 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 450px;
+    width: 90%;
+    max-width: 450px;
     height: 200px;
     transform: translate(-50%, -50%);
     background-color: #fff;
     border-radius: 10px;
+    padding: 20px 60px;
 
     &:focus {
         outline: none;
     }
 
+    .heading {
+        color: $main-dark-color;
+        margin: 0;
+        font-size: 20px;
+    }
 
     form {
         display: flex;
         flex-direction: column;
-        max-width: 380px;
         justify-content: center;
         gap: 10px;
-        margin: 40px auto;
+        margin: 0 auto;
 
         .colors {
             margin: 15px auto;
@@ -55,15 +61,10 @@
         }
         .bottom {
             display: flex;
-            justify-content: space-between;
 
-            .timeSlot {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
             .saveBtn {
                 padding: 7px 40px;
+                width: 100%;
             }
         }
     }

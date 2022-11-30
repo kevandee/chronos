@@ -44,7 +44,7 @@ const ModalWindowCalendar = ({ open, handleClose, isEdit }) => {
   return (
     <Modal open={open} onClose={handleClose}>
       <Box className={styles.container}>
-        <h1 style={{ margin: '0'}}>New Calendar</h1>
+        <h1 className={styles.heading}>New Calendar</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
             label={"Add title"}

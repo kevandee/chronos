@@ -50,7 +50,7 @@ const ModalWindowSettings= ({ open, handleClose, isEdit }) => {
     };
 
     const handleRoleChange = (values) => {
-        console.log(values);
+        console.log(values.target.defaultValue);
     }
     
     const openMore = Boolean(anchorEl);
@@ -82,7 +82,7 @@ const ModalWindowSettings= ({ open, handleClose, isEdit }) => {
                             <span>You</span>
                         </div>
                         {users.map((el, index) => {
-                            return <div className={styles.user} key={index}>
+                            return (<div className={styles.user} key={index}>
                                 <div className={styles.userInfo}>
                                     <Avatar alt="Unknown User" />
                                     <span>{el.username}</span>
@@ -105,23 +105,22 @@ const ModalWindowSettings= ({ open, handleClose, isEdit }) => {
                                         <Controller
                                         rules={{ required: true }}
                                         control={control}
-                                        name="promoting2"
+                                        name={el.username}
                                         render={({ field }) => {
                                             return(
                                                 <RadioGroup
                                                 aria-labelledby="radiobuttons-permissions"
                                                 defaultValue="user"
-                                                name="radio-buttons-group"
+                                                name={el.username}
                                                 sx={{ padding: '10px' }}
                                             >
 
                                                 <FormControlLabel
                                                 value="admin"
-                                                control={<Radio size="small" />}
+                                                control={<Radio size="small" onChange={handleRoleChange} />}
                                                 label="Admin"
-                                                onChange={(e) => console.log(e.target.defaultValue)}
                                                 />
-                                                <FormControlLabel value="user" control={<Radio size="small" />} label="User" />
+                                                <FormControlLabel value="user" control={<Radio size="small" onChange={console.log(field)} />} label="User" />
 
                                                 <Button variant="contained">Remove</Button>
                                             </RadioGroup>
@@ -141,7 +140,7 @@ const ModalWindowSettings= ({ open, handleClose, isEdit }) => {
                                     <FormControlLabel value="user" control={<Radio size="small" />} label="User" />
                                 </RadioGroup>
                                 </FormControl> */}
-                            </div>
+                            </div>)
                         })}
                     </div>
                     <div className={styles.inviteUser}>

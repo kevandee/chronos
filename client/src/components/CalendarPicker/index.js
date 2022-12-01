@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "@mui/material";
+import { Button, Accordion, AccordionSummary, Typography, AccordionDetails, Box } from "@mui/material";
 import { Calendar } from "react-modern-calendar-datepicker";
 
 import styles from '../CalendarPicker/CalendarPicker.module.scss';
@@ -8,6 +8,7 @@ import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
 import SettingsIcon from "@mui/icons-material/Settings";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import ModalWindowSettings from '../ModalWindowSettings/index';
 import { useOpenModal } from "../../hooks/useOpenModal";
@@ -162,14 +163,36 @@ const CalendarPicker = () => {
             open={modalInfoCalendar.isOpen}
             handleClose={modalInfoCalendar.handleClose}
             />
-            <Calendar
-            value={selectedDay}
-            onChange={onChange}
-            locale={myCustomLocale}
-            colorPrimary="#E07A5F"
-            calendarClassName={styles.customCalendar}
-            customDaysClassName={events}
-            />
+
+            <Accordion sx={{ display: {sm: 'block', md: 'none'} }}>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    >
+                    <Typography>Calendar</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <Calendar
+                    value={selectedDay}
+                    onChange={onChange}
+                    locale={myCustomLocale}
+                    colorPrimary="#E07A5F"
+                    calendarClassName={styles.customCalendar}
+                    customDaysClassName={events}
+                    />
+                </AccordionDetails>
+            </Accordion>
+            <Box sx={{ display: {xs: 'none', md: 'block'} }}>
+                <Calendar
+                value={selectedDay}
+                onChange={onChange}
+                locale={myCustomLocale}
+                colorPrimary="#E07A5F"
+                calendarClassName={styles.customCalendar}
+                customDaysClassName={events}
+                />
+            </Box>
 
             <div className={styles.closeEvents}>
                 {closeEvents.map(event => 

@@ -39,3 +39,10 @@ table {
 col {
     width: 100px;
 }
+
+
+@media screen and (max-width: 1200px) {
+    .events_container {
+        height: 100vh;
+    }
+}

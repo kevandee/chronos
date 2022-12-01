@@ -58,5 +58,13 @@
         margin: 0px 40px;
         padding: 10px;
         text-transform: capitalize;
+        display: flex;
+        gap: 5px;
     }
 }
+
+// @media screen and (max-width: 800px) {
+//     .calendarPicker {
+//         display: none;
+//     }
+// }

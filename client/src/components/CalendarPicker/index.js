@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
-import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Accordion, AccordionSummary, Typography, AccordionDetails, Box } from "@mui/material";
 import { Calendar } from "react-modern-calendar-datepicker";
 
 import styles from '../CalendarPicker/CalendarPicker.module.scss';
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
+import SettingsIcon from "@mui/icons-material/Settings";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import { Button } from "@mui/material";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+import ModalWindowSettings from '../ModalWindowSettings/index';
+import { useOpenModal } from "../../hooks/useOpenModal";
 import { selectCurrentCalendar, setCurrentCalendar } from "../../redux/slices/calendarSlice";
-import { useDispatch, useSelector } from "react-redux";
 import axios from "../../redux/axios";
 
 const myCustomLocale = {
@@ -94,6 +99,8 @@ const CalendarPicker = () => {
     const date = new Date();
     
     const [closeEvents, setCloseEvents] = useState([]);
+    const [events, setEvents] = useState([]);
+    const modalInfoCalendar = useOpenModal(false);
 
     const defaultValue = {
         year: date.getFullYear(),
@@ -130,19 +137,62 @@ const CalendarPicker = () => {
         }
     }, [currentCalendar.id, currentCalendar.events]);
 
+    useEffect(() => {
+        if (currentCalendar.id) {
+            axios.get(`/api/calendars/${currentCalendar.id}/events`)
+            .then((res) => {
+                let eventsArr = [];
+                res.data.map((el, index) => {
+                    let date = new Date(res.data[index].start_at);
+                    let obj = { year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, day: date.getUTCDate(), className: styles.orangeDay}
+                    eventsArr.push(obj);
+                })
+                setEvents(eventsArr);
+                console.log(eventsArr);
+            })
+            .catch((err) => {
+                console.error(err);
+                alert("Error");
+            });
+        }
+    }, [currentCalendar.id])
+
     return(
         <section className={styles.calendarPicker}>
-            <Calendar
-            value={selectedDay}
-            onChange={onChange}
-            locale={myCustomLocale}
-            colorPrimary="#E07A5F"
-            calendarClassName={styles.customCalendar}
-            customDaysClassName={[
-                // here we add some CSS classes
-                { year: 2022, month: 11, day: 4, className: styles.purpleDay },
-              ]}
+            <ModalWindowSettings
+            open={modalInfoCalendar.isOpen}
+            handleClose={modalInfoCalendar.handleClose}
             />
+
+            <Accordion sx={{ display: {sm: 'block', md: 'none'} }}>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    >
+                    <Typography>Calendar</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <Calendar
+                    value={selectedDay}
+                    onChange={onChange}
+                    locale={myCustomLocale}
+                    colorPrimary="#E07A5F"
+                    calendarClassName={styles.customCalendar}
+                    customDaysClassName={events}
+                    />
+                </AccordionDetails>
+            </Accordion>
+            <Box sx={{ display: {xs: 'none', md: 'block'} }}>
+                <Calendar
+                value={selectedDay}
+                onChange={onChange}
+                locale={myCustomLocale}
+                colorPrimary="#E07A5F"
+                calendarClassName={styles.customCalendar}
+                customDaysClassName={events}
+                />
+            </Box>
 
             <div className={styles.closeEvents}>
                 {closeEvents.map(event => 
@@ -155,7 +205,7 @@ const CalendarPicker = () => {
                 </div>
                 )}
             </div>
-            <Button variant='contained' className={styles.addBtn}>New Event</Button>
+            <Button variant='contained' className={styles.addBtn} onClick={() => modalInfoCalendar.handleOpen()}><SettingsIcon />Settings</Button>
         </section>
     )
 }

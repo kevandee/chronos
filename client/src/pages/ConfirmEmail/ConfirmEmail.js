@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './ConfirmEmail.module.scss';
 import background from '../../assets/images/ConfirmEmailBG.png';
-//import illustration from '../../assets/images/ConfirmEmail_illustration.png';
+import IllustrationSuccess from '../../assets/images/IllustrationSuccess.png';
 import IllustrationError from '../../assets/images/IllustrationError.png';
 
 import { fetchConfirmEmail } from '../../redux/slices/authSlice';
@@ -16,6 +16,7 @@ const ConfirmEmail = () => {
     const { token } = useParams();
 
     React.useEffect(() => {
+        console.log(token);
         dispatch(fetchConfirmEmail(token));
     }, []);
 
@@ -23,9 +24,8 @@ const ConfirmEmail = () => {
         <main>
             <section id={styles.bg}>
                 <div className={styles.content_box}>
-                    awudawd
                     {error && <><img src={IllustrationError} alt='Illustration'/><p>{error}</p></>}
-                    {userInfo && <><img /*src={illustration}*/ alt='Illustration'/><p>{userInfo}</p></>}
+                    {userInfo && <><img src={IllustrationSuccess} alt='Illustration'/><p>{userInfo}</p></>}
                 </div>
                 <div className={styles.image_box}>
                     <div className={styles.text}>

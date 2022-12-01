@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Modal, TextField, Box, Button, IconButton } from "@mui/material";
 import { useForm } from "react-hook-form";
 import axios from "../../redux/axios";
@@ -67,6 +67,7 @@ const ModalWindowCalendar = ({ open, handleClose, isEdit }) => {
   return (
     <Modal open={open} onClose={handleClose}>
       <Box className={styles.container}>
+        <h1 className={styles.heading}>New Calendar</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
             label={"Add title"}

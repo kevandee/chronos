@@ -16,7 +16,7 @@ import axios from "../../redux/axios";
 import styles from "./ModalWindowEvent.module.scss";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { selectCurrentCalendar, setCurrentCalendar } from "../../redux/slices/calendarSlice";
+import { selectCurrentCalendar } from "../../redux/slices/calendarSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const colors = [
@@ -29,12 +29,10 @@ const colors = [
 ];
 
 const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
-  const dispatch = useDispatch();
-  
   const [eventType, setEventType] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [color, setColor] = useState(0);
+  const [color, setColor] = useState('#54A3FF');
 
   const { register, handleSubmit } = useForm();
 
@@ -45,11 +43,11 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
       setTitle(selectInfo?.event?.title);
       setDescription(selectInfo?.event?._def.extendedProps.description);
       setEventType(selectInfo?.event?._def.extendedProps.event);
-      setColor(selectInfo?.event?._def.backgroundColor);
+      setColor(selectInfo.event?.backgroundColor);
     } else {
       setTitle("");
       setDescription("");
-      setColor(0);
+      setColor("#54A3FF");
     }
   }, [selectInfo, isEdit]);
 
@@ -65,8 +63,6 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
     try {
       setTitle("");
       setEventType("");
-      setColor(0);
-
       const calendarApi = selectInfo.view.calendar;
 
       const resData = {
@@ -96,7 +92,6 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
 
       // dispatch(setCurrentCalendar({...(currentCalendar), events: [...currentCalendar.events, res.data]}));
       handleClose();
-      //reset({ title: "", event: "" });
       setEventType("");
     } catch (err) {
       console.log(err);
@@ -108,18 +103,14 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
       setTitle(selectInfo?.event?.title);
       setEventType(selectInfo?.event?._def.extendedProps.event);
 
-      // fix, please))))
-      // setColor(colors.indexOf(selectInfo?.event?._def.backgroundColor));
-
       const calendarApi = selectInfo.view.calendar;
       //Update db with axios
       const resData = {
         title: data.title === "" ? title : data.title,
         description: data.description === "" ? description : data.description,
-        color: data.color,
+        color: color,
         type: data.event === "" ? eventType : data.event,
       };
-      console.log("response", resData);
 
       await axios.patch(`/api/events/${selectInfo.event.id}`, resData);
 
@@ -214,19 +205,17 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
               <div
                 className={styles.inputColor}
                 key={index}
+                selected={false}
                 style={{ backgroundColor: el }}
+                onClick={() => { setColor(el); }}
               >
                 <input
                   type="radio"
                   name="cardColor"
                   value={el}
-                  {...register("color", {
-                    onChange: (e) => {
-                      setColor(colors.indexOf(e.target.value));
-                    },
-                  })}
+                  {...register("color")}
                   required
-                  defaultChecked={isEdit ? index === color : index === 0}
+                  checked={el === color}
                 />
               </div>
             ))}

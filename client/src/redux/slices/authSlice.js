@@ -35,7 +35,7 @@ export const fetchConfirmEmail = createAsyncThunk(
   "auth/fetchConfirmEmail",
   async (params, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(`/api/auth/confirm/${params}`);
+      const { data } = await axios.get(`/api/auth/confirm/${params}`);
       return data;
     } catch (error) {
       return rejectWithValue(error.response.data.error);
@@ -48,8 +48,10 @@ export const fetchResetPassword = createAsyncThunk(
   async (params, { rejectWithValue }) => {
     try {
       const { data } = await axios.post("/api/auth/password-reset", params);
+      console.log(data);
       return data;
     } catch (error) {
+      console.log(error);
       return rejectWithValue(error.response.data.error);
     }
   }
@@ -66,6 +68,7 @@ export const fetchChangePassword = createAsyncThunk(
       );
       return data;
     } catch (error) {
+      console.log(error);
       return rejectWithValue(error.response.data.error);
     }
   }
@@ -76,8 +79,10 @@ export const fetchCheckToken = createAsyncThunk(
   async (params, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(`/api/auth/checkToken/${params}`);
+      console.log("fetchdata", data);
       return data;
     } catch (error) {
+      console.log(error);
       return rejectWithValue(error.response.data);
     }
   }

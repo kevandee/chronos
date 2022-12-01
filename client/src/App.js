@@ -90,10 +90,10 @@ function App() {
   const isAuth = useSelector(selectIsAuthMe);
   console.log("isAuth", isAuth);
   React.useEffect(() => {
-    if(!isAuth && !arr.includes(window.location.pathname)) {
-      // console.log(window.location);
-      window.location = '/login';
-    }
+    // if(!isAuth && !arr.includes(window.location.pathname)) {
+    //   // console.log(window.location);
+    //   window.location = '/login';
+    // }
   }, [isAuth]);
   React.useEffect(() => {
     if (userToken) {

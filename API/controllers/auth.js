@@ -55,17 +55,17 @@ module.exports = {
     await newCalendar(id);
 
     let confirmToken = generateConfirmToken({ id, email, login: data.login });
+
+    const link = `http://localhost:3000/confirm/${confirmToken}`;
+
     let message = `
-        Hi,
-        Thank you for signing up with usof.
-        To complete your account set-up, please verify your email address by clicking on the confirmation link below.
-        
-        Confirmation Link:
-        http://localhost:${config.port}/api/auth/confirm-email/${confirmToken}
-        *** If for any reason the above link is not clickable, please copy the link and paste it in your choice of browser.
-        Best regards,
-        - Anton Chaika
-        `;
+    <h2 style='font-size: 30px; font-family: Verdana , sans-serif; font-weight: 800; color:#3D405B'>weekly.</h2><br>
+    <h1 style='font-size: 26px; font-family: Verdana;'>Email Confirmation</h1>
+    <p>We just need one small favor from you - please confirm your email to continue.</p><br><br>
+    <a href='${link}' target='_blank' style='outline:none; background-color:#3D405B; font-size: 16px; color: #fff;
+    border: none; padding: 10px 40px; border-radius: 10px; margin: 10px 0;'>Confirm</a><br><br>
+    <p>If the button don't work <a target='_blank' href='${link}'>Click here</a>.</p>
+    `;
     sendLetter(email, "Confirm email", message);
 
     res.sendStatus(200);
@@ -122,57 +122,63 @@ module.exports = {
 
     let confirmToken = generateConfirmToken({ email: data.email });
 
+    const link = `http://localhost:3000/reset-password/${confirmToken}`;
+
     let message = `
-        Hi,
-        Thank you for signing up with usof.
-        To complete your account set-up, please verify your email address by clicking on the confirmation link below.
-        Confirmation Post URL:
-        http://localhost:8000/reset-password/${confirmToken}
-        *** If for any reason the above link is not clickable, please copy the link and paste it in your choice of browser.
-        Best regards,
-        - Anton Chaika
-        `;
-    sendLetter(data.email, "Confirm email", message);
+    <h2 style='font-size: 30px; font-family: Verdana , sans-serif; font-weight: 800; color:#3D405B'>weekly.</h2><br>
+    <h1 style='font-size: 26px; font-family: Verdana;'>Password Reset</h1>
+    <p style='font-family: Verdana; '>Hello, ${req.body.email}. We have received a request to reset the password for your account.
+    No changes have been made for your account yet. <b>If you did not request a password reset, ignore this message</b></p><br/>
+    <p style='font-family: Verdana;'>Tap on the button to change password</p><br/>
+    <a href='${link}' target='_blank' style='outline:none; background-color:#3D405B; font-size: 16px; color: #fff;
+    border: none; padding: 10px 40px; border-radius: 10px; margin: 10px 0;'>Reset password</a><br><br>
+    <p>If the button don't work <a target='_blank' href='${link}'>Click here</a>.</p>
+    `;
+    sendLetter(data.email, "Password Reset", message);
 
     res.sendStatus(200);
   },
 
   async confirmEmail(req, res) {
-    let token = req.params.confirmToken;
-    let data = authenticateConfirmToken(token);
-    if (!token || !data) {
-      res.sendStatus(403);
-      return;
-    }
-    delete data.iat;
-    delete data.exp;
+    try {
+      let token = req.params.confirmToken;
+      let data = authenticateConfirmToken(token);
+      if (!token || !data) {
+        return res.status(403).json({ error: 'This link is no longer reachable' });
+      }
+      delete data.iat;
+      delete data.exp;
 
-    await users.save(data);
-    res.sendStatus(200);
+      await users.save(data);
+      res.status(200).send('Email has been successfully confirmed');
+    }
+    catch(err) {
+      console.log(err);
+      res.status(500).send('Internal server error');
+    }
   },
 
   async confirmNewPassword(req, res) {
-    let newPassword = req.body.newPassword;
+    let newPassword = req.body.password;
     if (!newPassword || newPassword.length < 8) {
-      res.sendStatus(400);
-      return;
+      console.log(newPassword.length);
+      return res.status(400).json({ error: 'Password is short' });
     }
 
     let token = req.params.confirmToken;
     let data = authenticateConfirmToken(token);
+    console.log(data);
 
     if (!token || !data) {
-      res.sendStatus(400);
-      return;
+      return res.status(400).send('Link is no longer reachable');
     }
     let userData = await users.find({ email: data.email });
 
     userData.password = hashPassword(newPassword);
     if ((await users.save(userData)) == -1) {
-      res.sendStatus(400);
-      return;
+      return res.status(400);
     }
-    res.sendStatus(200);
+    return res.status(200);
   },
 
   async getMe(req, res) {
@@ -194,4 +200,20 @@ module.exports = {
       res.status(500).send("Access denied");
     }
   },
+
+  async checkToken(req, res) {
+    try {
+      let token = req.params.token;
+      let data = authenticateConfirmToken(token);
+
+      if (!token || !data) {
+        return res.status(400).send('This link is no longer reachable');
+      }
+
+      return res.status(200);
+    }
+    catch(err) {
+      return res.status(500).send('Some error happened');
+    }
+  }
 };

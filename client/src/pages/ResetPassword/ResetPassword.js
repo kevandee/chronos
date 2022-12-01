@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IconButton, Button, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -17,6 +17,7 @@ const ResetPassword = () => {
     const dispatch = useDispatch();
 
     const { userInfo } = useSelector((state) => state.auth);
+    const [sent, setSent] = useState(false);
 
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -28,6 +29,7 @@ const ResetPassword = () => {
     const onSubmit = async (values) => {
         console.log(values);
         dispatch(fetchResetPassword(values));
+        setSent(true);
     }
 
     return(
@@ -40,7 +42,7 @@ const ResetPassword = () => {
                         <span>Enter the email address associated<br/>with your account</span>
                     </div>
                     {!Object.keys(errors).length == 0 && <Alert severity="warning" className={styles.errmsg}>{Object.values(errors)[0].message}</Alert>}
-                    {userInfo && <Alert severity="success" className={styles.errmsg}>We sent an email if the email is associated with your account</Alert>}
+                    {sent && <Alert severity="success" className={styles.errmsg}>If there is an account associated with this email, we have sent an instructions</Alert>}
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className={styles.inputs}>
                             <div className={styles.form}>

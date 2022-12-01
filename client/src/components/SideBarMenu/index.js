@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Typography, Button, Link, Avatar } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -8,19 +8,14 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AddIcon from "@mui/icons-material/Add";
 import SettingsIcon from "@mui/icons-material/Settings";
 import PersonIcon from "@mui/icons-material/Person";
-import { useNavigate } from "react-router-dom";
 import ModalWindowCalendar from "../ModalWindowCalendar";
 import { useOpenModal } from "../../hooks/useOpenModal";
 import { setCurrentCalendar } from "../../redux/slices/calendarSlice";
 
 const SideBarMenu = () => {
   const dispatch = useDispatch();
-  const { userInfo, error } = useSelector((state) => state.auth);
-  const navigate = useNavigate();
+  const { userInfo } = useSelector((state) => state.auth);
   const calendars = useSelector((state) => state.calendars.calendars);
-
-  const [selectInfo, setSelectInfo] = useState();
-  const [isEdit, setIsEdit] = useState(false);
   const modalInfoCalendar = useOpenModal(false);
 
   const _setCurrentCalendar = (id) => {
@@ -43,8 +38,6 @@ const SideBarMenu = () => {
       <ModalWindowCalendar
         open={modalInfoCalendar.isOpen}
         handleClose={modalInfoCalendar.handleClose}
-        selectInfo={selectInfo}
-        isEdit={isEdit}
       />
       <div className={styles.logo_container}>
         <Typography variant="h1" className={styles.logo}>

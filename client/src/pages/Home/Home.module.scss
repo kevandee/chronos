@@ -1,5 +1,31 @@
 @import '../../index.scss';
 
+.gridContainer {
+    display: grid;
+    grid-template-columns: 1.2fr 4fr 1.2fr;
+    gap: 20px;
+}
+
+@media screen and (max-width: 1200px) {
+    .gridContainer {
+        grid-template-columns: 8fr 1fr;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .gridContainer {
+        grid-template-columns: 1fr;
+    }
+}
+
+.navBar {
+    .logo {
+        font-family: 'Oswald', sans-serif;
+        color: #3D405B;
+        font-size: 40px;
+    }
+}
+
 .sidebar_container {
     box-sizing: border-box;
     display: flex;
@@ -7,21 +33,13 @@
     justify-content: space-between;
     max-width: 250px;
     border-right: 1px solid #F1F1F1;
-    height: 100vh;
+    height: 100%;
     padding: 30px 0;
-    
-    .logo_container {
-        .logo {
-            font-size: 40px;
-            font-family: 'Oswald', sans-serif;
-            font-weight: 500;
-        }
-    }
 
     .calendars_container {
         border-bottom: 1px solid #F1F1F1;
         flex: 1;
-        margin-top: 80px;
+        margin: 0 auto;
 
         .title {
             display: flex;
@@ -133,11 +151,5 @@
             font-size: 18px;
             line-height: 104.7%;
         }
-    }
-}
-
-@media screen and (max-width: 1200px) {
-    .sidebar_container {
-        display: none;
     }
 }

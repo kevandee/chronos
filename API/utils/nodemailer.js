@@ -14,7 +14,7 @@ function sendLetter(email, subject, text) {
     from: `achaika <${config.email.user}>`,
     to: email,
     subject: subject,
-    text: text,
+    html: text,
   };
   // nodemailer
   transporter.sendMail(message, (error, info) => {

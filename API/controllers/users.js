@@ -42,4 +42,17 @@ module.exports = {
       res.status(500).json(err);
     }
   },
+
+  async getUsers(req, res) {
+    try {
+      console.log("get users");
+      const key = req.query["unique-key"];
+      let {without} = req.query;
+      without = JSON.parse(without);
+      let usersList = await users.findByUniqueKey(key, without);
+      res.json(usersList);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  }
 };

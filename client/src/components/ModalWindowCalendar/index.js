@@ -7,9 +7,11 @@ import styles from "./ModalWindowCalendar.module.scss";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { setCalendars } from "../../redux/slices/calendarSlice";
 import { useDispatch, useSelector } from "react-redux";
+import AsyncSelect from 'react-select/async';
 
 const ModalWindowCalendar = ({ open, handleClose, isEdit }) => {
   const [title, setTitle] = useState("");
+  const [members, setMembers] = useState([]);
 
   const { userInfo } = useSelector((state) => state.auth);
   const calendars = useSelector((state) => state.calendars.calendars);
@@ -27,7 +29,7 @@ const ModalWindowCalendar = ({ open, handleClose, isEdit }) => {
 
       const resData = {
         title: data.title,
-        members: [{ id: userInfo?.id }],
+        members: [{ id: userInfo?.id }, ...members],
       };
       console.log("new calendar", resData);
 
@@ -39,6 +41,27 @@ const ModalWindowCalendar = ({ open, handleClose, isEdit }) => {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const loadOptions = async (
+    inputValue,
+    callback
+  ) => {
+    if(!inputValue) {
+      return
+    }
+    const res = await axios.get(`/api/users?unique-key=${inputValue}&without=${encodeURIComponent(JSON.stringify(members))}`);
+    const options = [];
+    res.data.forEach((user) => {
+      if (userInfo.id != user.id){
+        options.push({
+          value: user,
+          label: user.full_name
+        })
+      }
+    });
+
+    callback(options);
   };
 
   return (
@@ -54,6 +77,19 @@ const ModalWindowCalendar = ({ open, handleClose, isEdit }) => {
                 setTitle(e.target.value);
               },
             })}
+            required
+          />
+
+          <AsyncSelect
+            // label={"Invite members"}
+            // className={styles.textfield} 
+            options={[]}
+            loadOptions={loadOptions} 
+            defaultOptions
+            isMulti
+            onChange={(newMembers) => setMembers(newMembers.map(val => {
+              return {id: val.value.id, email: val.value.email}
+            }))}
             required
           />
 

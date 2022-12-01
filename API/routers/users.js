@@ -5,5 +5,6 @@ const router = require("express").Router();
 
 router.post("/location", authenticateToken, controller.setLocation);
 router.get("/holiday", authenticateToken, controller.getHoliday);
+router.get("/", authenticateToken, controller.getUsers);
 
 module.exports = router;

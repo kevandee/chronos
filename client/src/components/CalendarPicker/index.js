@@ -154,20 +154,6 @@ const CalendarPicker = () => {
                     </div>
                 </div>
                 )}
-              {/* <div className={styles.event} style={{ backgroundColor: 'rgba(228, 231, 36, 0.7)'}}>
-                <span className={styles.taskTitle}>Task 2</span>
-                <div className={styles.time}>
-                    <AccessTimeIcon></AccessTimeIcon>
-                    <span>12:30 - 14:15</span>
-                </div>
-              </div>
-              <div className={styles.event} style={{ backgroundColor: 'rgba(52, 73, 94, 0.7)'}}>
-                <span className={styles.taskTitle}>Task 3</span>
-                <div className={styles.time}>
-                    <AccessTimeIcon></AccessTimeIcon>
-                    <span>12:30 - 14:15</span>
-                </div>
-              </div> */}
             </div>
             <Button variant='contained' className={styles.addBtn}>New Event</Button>
         </section>

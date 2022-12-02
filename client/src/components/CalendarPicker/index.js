@@ -164,11 +164,11 @@ const CalendarPicker = () => {
             handleClose={modalInfoCalendar.handleClose}
             />
 
-            <Accordion sx={{ display: {sm: 'block', md: 'none'} }}>
+            {/* <Accordion sx={{ display: {sm: 'block', md: 'none'} }}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
-                    id="panel1a-header"
+                    id="calendar"
                     >
                     <Typography>Calendar</Typography>
                 </AccordionSummary>
@@ -182,8 +182,8 @@ const CalendarPicker = () => {
                     customDaysClassName={events}
                     />
                 </AccordionDetails>
-            </Accordion>
-            <Box sx={{ display: {xs: 'none', md: 'block'} }}>
+            </Accordion> */}
+            <Box sx={{ mb: '10px' }}>
                 <Calendar
                 value={selectedDay}
                 onChange={onChange}
@@ -194,7 +194,29 @@ const CalendarPicker = () => {
                 />
             </Box>
 
-            <div className={styles.closeEvents}>
+            <Accordion sx={{ display: {sm: 'block', md: 'none'}, mb: '20px', borderRadius: '10px', border: 'none' }}>
+                <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="events"
+                >
+                    <Typography>Upcoming Events</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <div className={styles.closeEvents}>
+                        {closeEvents.map(event => 
+                        <div key={"key -" + event.id} className={styles.event} style={{ backgroundColor: event.color}}>
+                            <span className={styles.taskTitle}>{event.title}</span>
+                            <div className={styles.time}>
+                                <AccessTimeIcon></AccessTimeIcon>
+                                <span>{getTime(event.start_at)} - {getTime(event.end_at)}</span>
+                            </div>
+                        </div>
+                        )}
+                    </div>
+                </AccordionDetails>
+            </Accordion>
+            <Box className={styles.closeEvents} sx={{ display: {xs: 'none', md: 'block'} }}>
                 {closeEvents.map(event => 
                 <div key={"key -" + event.id} className={styles.event} style={{ backgroundColor: event.color}}>
                     <span className={styles.taskTitle}>{event.title}</span>
@@ -204,7 +226,8 @@ const CalendarPicker = () => {
                     </div>
                 </div>
                 )}
-            </div>
+            </Box>
+
             <Button variant='contained' className={styles.addBtn} onClick={() => modalInfoCalendar.handleOpen()}><SettingsIcon />Settings</Button>
         </section>
     )

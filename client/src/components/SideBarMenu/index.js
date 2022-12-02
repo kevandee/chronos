@@ -19,6 +19,7 @@ const SideBarMenu = () => {
   const modalInfoCalendar = useOpenModal(false);
 
   const _setCurrentCalendar = (id) => {
+    console.log("set calendar", id)
     dispatch(
       setCurrentCalendar(
         calendars?.items?.find((calendar) => calendar.id == id)

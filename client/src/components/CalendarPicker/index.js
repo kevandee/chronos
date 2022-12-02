@@ -95,9 +95,11 @@ const getTime = (date) => {
 
 const CalendarPicker = () => {
     const dispatch = useDispatch();
+    const {userInfo} = useSelector((state) => state.auth);
     const currentCalendar = useSelector(selectCurrentCalendar);
     const date = new Date();
     
+    const [isGeneral, setIsGeneral] = useState(false);
     const [closeEvents, setCloseEvents] = useState([]);
     const [events, setEvents] = useState([]);
     const modalInfoCalendar = useOpenModal(false);
@@ -139,6 +141,7 @@ const CalendarPicker = () => {
 
     useEffect(() => {
         if (currentCalendar.id) {
+            setIsGeneral(userInfo.default_calendar_id == currentCalendar.id);
             axios.get(`/api/calendars/${currentCalendar.id}/events`)
             .then((res) => {
                 let eventsArr = [];
@@ -205,7 +208,7 @@ const CalendarPicker = () => {
                 </div>
                 )}
             </div>
-            <Button variant='contained' className={styles.addBtn} onClick={() => modalInfoCalendar.handleOpen()}><SettingsIcon />Settings</Button>
+            {!isGeneral && <Button variant='contained' className={styles.addBtn} onClick={() => modalInfoCalendar.handleOpen()}><SettingsIcon />Settings</Button>}
         </section>
     )
 }

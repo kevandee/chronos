@@ -82,8 +82,6 @@ const ModalWindowCalendar = ({ open, handleClose, isEdit }) => {
           />
 
           <AsyncSelect
-            // label={"Invite members"}
-            // className={styles.textfield} 
             options={[]}
             loadOptions={loadOptions} 
             defaultOptions

@@ -17,6 +17,7 @@ import ResetPassword from './pages/ResetPassword/ResetPassword';
 import ChangePassword from './pages/ChangePassword/ChangePassword';
 import ConfirmEmail from './pages/ConfirmEmail/ConfirmEmail';
 import ConfirmCalendarInvite from './pages/ConformCalendarInvite/ConfirmCalendarInvite';
+import Profile from "./pages/Profile/Profile";
 
 const theme = createTheme({
   palette: {
@@ -31,10 +32,6 @@ const router = createBrowserRouter([
       path: "/",
       element: <Home />
   },
-  // {
-  //     path: '/questions',
-  //     element: <Questions />
-  // },
   {
       path: '/login',
       element: <Login />
@@ -59,6 +56,10 @@ const router = createBrowserRouter([
     path: '/confirm-calendar/:token',
     element: <ConfirmCalendarInvite />
   },
+  {
+    path: '/profile',
+    element: <Profile />
+  }
   // {
   //     path: '/questions/:id',
   //     element: <FullPost />
@@ -110,17 +111,7 @@ function App() {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline enableColorScheme />
-        {!arr.includes(path) &&
-        path.substring(0, 9) != "/confirm/" &&
-        path.substring(0, 16) != "/reset-password/" ? (
-          <>
-            {/* <Header /> */}
-            <RouterProvider router={router} />
-            {/* <Footer /> */}
-          </>
-        ) : (
-          <RouterProvider router={router} />
-        )}
+        <RouterProvider router={router} />
       </ThemeProvider>
     </>
   );

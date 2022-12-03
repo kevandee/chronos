@@ -31,6 +31,7 @@ const Home = () => {
   const modalInfoCalendar = useOpenModal(false);
 
   const [state, setState] = React.useState(false);
+  const [selected, setSelected] = React.useState(2);
   
   // const isCalendarsLoading = calendars.status === 'loading';
   // console.log("main", calendars);
@@ -115,10 +116,8 @@ const Home = () => {
                     id="General"
                     name="calendar"
                     value="General"
-                    defaultChecked={true}
-                    onClick={() =>
-                      _setCurrentCalendar(userInfo?.default_calendar_id)
-                    }
+                    checked={selected === userInfo?.default_calendar_id}
+                    onChange={() => {setSelected(userInfo?.default_calendar_id);  _setCurrentCalendar(userInfo?.default_calendar_id)}}
                   />
                   <label htmlFor="General">General</label>
                 </td>
@@ -135,7 +134,8 @@ const Home = () => {
                             id={calendar.id}
                             name="calendar"
                             value={calendar.id}
-                            onClick={() => _setCurrentCalendar(calendar.id)}
+                            checked={selected === calendar.id}
+                            onChange={() =>  { setSelected(calendar.id); _setCurrentCalendar(calendar.id) }}
                           />
                           <label htmlFor={calendar.id}>{calendar.title}</label>
                         </td>

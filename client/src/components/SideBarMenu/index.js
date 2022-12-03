@@ -98,7 +98,7 @@ const SideBarMenu = () => {
         </div>
       </div>
       <div className={styles.links}>
-        <Link href="/account">
+        <Link href="/profile">
           <PersonIcon />
           Account
         </Link>

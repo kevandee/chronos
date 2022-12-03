@@ -91,7 +91,7 @@ const getTime = (date) => {
       minute += "0";
     }
     return `${hour}:${minute}`;
-  };
+};
 
 const CalendarPicker = () => {
     const dispatch = useDispatch();
@@ -130,7 +130,7 @@ const CalendarPicker = () => {
             const date = new Date();
             axios.get(`/api/calendars/${currentCalendar.id}/events?date=${date.toISOString()}&limit=5`)
             .then((res) => {
-                setCloseEvents(res.data);
+                setCloseEvents(res.data.sort((a, b) =>  new Date(a.start_at) - new Date(b.start_at)));
             })
             .catch((err) => {
                 console.error(err);
@@ -211,6 +211,7 @@ const CalendarPicker = () => {
                 </div>
                 )}
             </Box>
+
             {!isGeneral && <Button variant='contained' className={styles.addBtn} onClick={() => modalInfoCalendar.handleOpen()}><SettingsIcon />Settings</Button>}
         </section>
     )

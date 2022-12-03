@@ -121,7 +121,7 @@ const CalendarPicker = () => {
             console.error(err);
             alert("Error");
           });;
-        console.log(res.data);
+          
         dispatch(setCurrentCalendar({...(currentCalendar), events: res.data, day: date}));
     }
 

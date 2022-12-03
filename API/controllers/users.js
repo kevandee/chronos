@@ -3,6 +3,9 @@ const fetch = require("node-fetch");
 const { GEONAMES_USERNAME, HOLIDAY_API_KEY } = require("../config.json");
 const users = new (require("../models/users"))();
 const regions = require('../global/regions');
+const hashPassword = require('../utils/hashPassword');
+const Resize = require('../utils/resize');
+const path = require('path');
 
 module.exports = {
   async setLocation(req, res) {
@@ -66,5 +69,39 @@ module.exports = {
     } catch (err) {
       res.status(500).json(err);
     }
-  }
+  },
+
+  async updateUser(req, res) {
+    try {
+      const data = req.body;
+
+      if (data.email || data.id || data.login || data.default_calendar_id) {
+        res.sendStatus(400);
+        return;
+      }
+
+      if (data.password) {
+        data.password = hashPassword(data.password);
+      }
+
+      await users.save({id: req.user.id, ...data});
+      let savedUser = await users.find({id: req.user.id});
+      res.status(200).json(savedUser);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+
+  async setUserAvatar(req, res) {
+    const user = req.user;
+    const imagePath = path.join(__dirname, '../user_files/profile_pictures');
+    const fileUpload = new Resize(imagePath);
+    // console.log("image", req);
+    if (!req.file) {
+        res.status(401).json({error: 'Please provide an image'});
+    }
+    await fileUpload.save(req.file.buffer, user.login + '.png');
+    await users.save({id: user.id, profile_picture: 'profile_pictures/' + user.login + '.png'})
+    return res.sendStatus(200);
+},
 };

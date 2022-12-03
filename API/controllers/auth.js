@@ -96,6 +96,7 @@ module.exports = {
 
     const token = generateAccessToken({
       login: userData.login,
+      full_name: userData.full_name,
       id: userData.id,
       role: userData.role,
     });

@@ -74,6 +74,7 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
         type: data.event,
       };
       console.log("current calendar", currentCalendar);
+      console.log(resData);
       //Add here axios to db
       const res = await axios.post(
         `/api/calendars/${currentCalendar.id}/events`,

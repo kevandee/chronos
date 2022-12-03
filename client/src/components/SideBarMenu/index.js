@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Typography, Button, Link, Avatar } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -18,7 +18,10 @@ const SideBarMenu = () => {
   const calendars = useSelector((state) => state.calendars.calendars);
   const modalInfoCalendar = useOpenModal(false);
 
+  const [selected, setSelected] = useState(2);
+
   const _setCurrentCalendar = (id) => {
+    console.log("set calendar", id)
     dispatch(
       setCurrentCalendar(
         calendars?.items?.find((calendar) => calendar.id == id)
@@ -59,10 +62,8 @@ const SideBarMenu = () => {
                     id="General"
                     name="calendar"
                     value="General"
-                    defaultChecked={true}
-                    onClick={() =>
-                      _setCurrentCalendar(userInfo?.default_calendar_id)
-                    }
+                    checked={selected === userInfo?.default_calendar_id}
+                    onChange={() => {setSelected(userInfo?.default_calendar_id);  _setCurrentCalendar(userInfo?.default_calendar_id)}}
                   />
                   <label htmlFor="General">General</label>
                 </td>
@@ -79,9 +80,10 @@ const SideBarMenu = () => {
                             id={calendar.id}
                             name="calendar"
                             value={calendar.id}
-                            onClick={() => _setCurrentCalendar(calendar.id)}
+                            checked={selected === calendar.id}
+                            onChange={() =>  { setSelected(calendar.id); _setCurrentCalendar(calendar.id) }}
                           />
-                          <label htmlFor={calendar.id}>{calendar.title}</label>
+                          <label htmlFor={calendar.id}>{calendar.title}wadawd</label>
                         </td>
                       </tr>
                     );

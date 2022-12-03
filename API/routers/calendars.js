@@ -14,6 +14,10 @@ router
   .route("/:calendarId/members")
   .get(authenticateToken, controller.getCalendarMembers)
   .post(authenticateToken, controller.setCalendarMembers);
+
+router.delete("/:calendarId/members/:userId", authenticateToken, controller.removeCalendarMember);
+router.patch("/:calendarId/members/:userId", authenticateToken, controller.updateCalendarMember);
+
 router.post(
   "/:calendarId/events",
   authenticateToken,
@@ -27,5 +31,9 @@ router.get(
 router
   .route("/:calendarId/events/:eventId")
   .delete(authenticateToken, controller.deleteCalendarEvent);
-
+router.get(
+  "/confirm/:confirmToken",
+  authenticateToken,
+  controller.confirmInvite
+);
 module.exports = router;

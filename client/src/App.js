@@ -16,6 +16,7 @@ import Signup from './pages/Signup/Signup';
 import ResetPassword from './pages/ResetPassword/ResetPassword';
 import ChangePassword from './pages/ChangePassword/ChangePassword';
 import ConfirmEmail from './pages/ConfirmEmail/ConfirmEmail';
+import ConfirmCalendarInvite from './pages/ConformCalendarInvite/ConfirmCalendarInvite';
 
 const theme = createTheme({
   palette: {
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
   {
       path: '/reset-password/:token',
       element: <ChangePassword />
+  },
+  {
+    path: '/confirm-calendar/:token',
+    element: <ConfirmCalendarInvite />
   },
   // {
   //     path: '/questions/:id',

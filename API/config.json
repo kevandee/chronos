@@ -1,6 +1,6 @@
 {
     "port": 8000,
-    "HOLIDAY_API_KEY": "0d9204c93586457bbfd20b22c0631788",
+    "HOLIDAY_API_KEY": "AIzaSyBqcGaK4l9b4kCGTv_Gsuan4SsADlpjLl0",
     "GEONAMES_USERNAME": "kevandee",
     "db" : {
         "dialect": "mysql",

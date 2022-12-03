@@ -2,6 +2,7 @@ var wc = require("which-country");
 const fetch = require("node-fetch");
 const { GEONAMES_USERNAME, HOLIDAY_API_KEY } = require("../config.json");
 const users = new (require("../models/users"))();
+const regions = require('../global/regions');
 
 module.exports = {
   async setLocation(req, res) {
@@ -20,19 +21,32 @@ module.exports = {
 
   async getHoliday(req, res) {
     try {
-      console.log(req.query);
+      const BASE_CALENDAR_URL = "https://www.googleapis.com/calendar/v3/calendars";
+      const BASE_CALENDAR_ID_FOR_PUBLIC_HOLIDAY = "holiday@group.v.calendar.google.com";
+      const API_KEY = HOLIDAY_API_KEY; 
+  
       const { country } = await users.find({ id: req.user.id });
+      const CALENDAR_REGION = `en.${regions[country.toLowerCase()]}`;
+      console.log(req.query);
       const { year, month, day } = req.query;
+      const datetime = new Date(Date.UTC(year, month, day));
+      // `${year}-${+month+1}-${+day < 10 ? '0'+day : day}`
+      // console.log(datetime);
+      const timeMin = datetime.toISOString();
+      datetime.setUTCHours(23, 59, 59);
+      const timeMax = datetime.toISOString();
 
-      const response = await fetch(
-        `https://holidays.abstractapi.com/v1/?api_key=${HOLIDAY_API_KEY}&country=${country}&year=${+year}&month=${
-          +month + 1
-        }&day=${+day}`
-      );
+      // console.log({timeMin,timeMax});
+
+      const url = `${BASE_CALENDAR_URL}/${CALENDAR_REGION}%23${BASE_CALENDAR_ID_FOR_PUBLIC_HOLIDAY}/events?key=${API_KEY}&timeMin=${timeMin}&timeMax=${timeMax}`
+
+      const response = await fetch(url);
       const data = await response.json();
-
-      if (data && data[0]) {
-        res.json(data[0]);
+      // console.log(data);
+      if (data && data.items.length != 0) {
+        let name = (data.items[0].summary.split("(Suspended)"))[0];
+        
+        res.json({name});
       } else {
         res.json({});
       }

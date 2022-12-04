@@ -34,7 +34,7 @@ const ModalWindowCalendar = ({ open, handleClose, isEdit }) => {
       console.log("new calendar", resData);
 
       const res = await axios.post(`/api/calendars/`, resData);
-
+      console.log("new calendar", res.data);
       dispatch(setCalendars([...calendars.items, res.data]));
 
       handleClose();

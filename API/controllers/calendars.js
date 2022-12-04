@@ -71,6 +71,8 @@ module.exports = {
     const newCalendarWithMembers = await calendars.find({
       id: savedCalendar.id,
     });
+    newCalendarWithMembers.dataValues.members = await calendars.getCalendarMembers(savedCalendar.id);
+    
     res.status(200).json(newCalendarWithMembers);
     return;
   },
@@ -457,7 +459,7 @@ module.exports = {
     await users_calendars.save({
       user_id: userId,
       calendar_id: calendarId,
-      role: data.role,
+      user_role: data.role,
     });
 
     res.sendStatus(200);

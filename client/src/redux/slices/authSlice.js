@@ -40,7 +40,7 @@ export const fetchSignup = createAsyncThunk(
   "auth/fetchSignup",
   async (params, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post("/api/auth/register", params);
+      const { data } = await authAxios.post("/api/auth/register", params);
       return data;
     } catch (error) {
       console.log(error);

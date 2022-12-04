@@ -64,8 +64,10 @@ module.exports = {
     try {
       console.log("get users");
       const key = req.query["unique-key"];
-      let { without } = req.query;
-      without = JSON.parse(without);
+      let without  = req.query.without;
+      if(without) {
+        without = JSON.parse(without);
+      }
       let usersList = await users.findByUniqueKey(key, without);
       res.json(usersList);
     } catch (err) {

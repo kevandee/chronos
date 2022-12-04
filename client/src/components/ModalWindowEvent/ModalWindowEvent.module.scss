@@ -68,6 +68,18 @@
             }
         }
     }
+
+}
+
+.inviteUser {
+    display: flex;
+    .userInput {
+        width: 100%;
+    }
+
+    svg {
+        color: $main-dark-color;
+    }
 }
 
 .readOnlyInput {

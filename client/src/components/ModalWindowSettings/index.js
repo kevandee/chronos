@@ -55,7 +55,7 @@ const ModalWindowSettings = ({ open, handleClose }) => {
   const handleRoleChange = (values, user) => {
     let role = values.target.defaultValue;
     role = role == "admin" ? "assignee" : "watcher";
-
+    console.log("role", role);
     axios
       .patch(`/api/calendars/${currentCalendar.id}/members/${user.id}`, {
         role,
@@ -129,19 +129,19 @@ const ModalWindowSettings = ({ open, handleClose }) => {
     }
   }, [open]);
 
-  const loadOptions = async (inputValue) => {
-    if (!inputValue.nativeEvent.data) {
+  const loadOptions = async (event) => {
+    if (!event.target.value) {
       return;
     }
     const without = `&without=${encodeURIComponent(
       JSON.stringify([...users, ...invitedUsers])
     )}`;
     console.log(
-      `/api/users?unique-key=${inputValue.nativeEvent.data}${without}`,
+      `/api/users?unique-key=${event.target.value}${without}`,
       users
     );
     const res = await axios.get(
-      `/api/users?unique-key=${inputValue.nativeEvent.data}${without}`
+      `/api/users?unique-key=${event.target.value}${without}`
     );
 
     const data = res.data.filter((val) => val.id != userInfo.id);

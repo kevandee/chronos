@@ -33,7 +33,7 @@ const ConfirmEmail = () => {
           {userInfo && (
             <>
               <img src={IllustrationSuccess} alt="Illustration" />
-              <p>{userInfo}</p>
+              <p>Email has been successfully confirmed</p>
             </>
           )}
         </div>

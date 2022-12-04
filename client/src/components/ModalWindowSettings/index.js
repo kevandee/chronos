@@ -176,7 +176,8 @@ const ModalWindowSettings = ({ open, handleClose }) => {
       .catch();
   };
 
-  const yourAvatarUrl = `http://localhost:8000/api/files/${userInfo.profile_picture}`;
+  let yourAvatarUrl;
+  {userInfo && (yourAvatarUrl = `http://localhost:8000/api/files/${userInfo.profile_picture}`)}
 
   return (
     <Modal open={open} onClose={handleClose}>

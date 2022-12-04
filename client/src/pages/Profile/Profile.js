@@ -121,7 +121,7 @@ const Profile = () => {
         <div className={styles.user}>
           <div className={styles.heading}>
             <IconButton
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/home")}
               aria-label="go back"
               className={styles.backBtn}
             >

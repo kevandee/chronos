@@ -1,22 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Typography, Button, Link, Avatar } from "@mui/material";
+import { Typography, Button, Link, Avatar, IconButton } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import styles from "./SideBarMenu.module.scss";
 
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AddIcon from "@mui/icons-material/Add";
-import SettingsIcon from "@mui/icons-material/Settings";
+import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from "@mui/icons-material/Person";
 import ModalWindowCalendar from "../ModalWindowCalendar";
 import { useOpenModal } from "../../hooks/useOpenModal";
 import { setCurrentCalendar } from "../../redux/slices/calendarSlice";
+import axios from "../../redux/axios";
 
 const SideBarMenu = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { userInfo } = useSelector((state) => state.auth);
   const calendars = useSelector((state) => state.calendars.calendars);
   const modalInfoCalendar = useOpenModal(false);
+  const fullnameRef = useRef();
 
   const [selected, setSelected] = useState(2);
 
@@ -29,7 +33,12 @@ const SideBarMenu = () => {
     dispatch(setCurrentCalendar({ ...calendar, isAdmin }));
   };
 
-  const fullnameRef = useRef();
+  const handleLogOut = () => {
+    console.log('log out');
+    axios.post('/api/auth/logout');
+    window.location.reload();
+    navigate('/');
+  }
 
   useEffect(() => {
     if (userInfo && fullnameRef)
@@ -37,6 +46,10 @@ const SideBarMenu = () => {
         ?.split(" ")
         ?.join("<br/>");
   }, [userInfo, fullnameRef]);
+
+  
+  let yourAvatarUrl;
+  {userInfo && (yourAvatarUrl = `http://localhost:8000/api/files/${userInfo.profile_picture}`)}
 
   return (
     <section className={styles.sidebar_container}>
@@ -110,18 +123,21 @@ const SideBarMenu = () => {
           <PersonIcon />
           Account
         </Link>
-        <Link href="/settings">
+        {/* <Link href="/settings">
           <SettingsIcon />
           Settings
-        </Link>
+        </Link> */}
       </div>
-      <div className={styles.user}>
-        <Avatar
-          alt="User Name"
-          src="img"
-          sx={{ width: "50px", height: "50px" }}
-        ></Avatar>
-        <span ref={fullnameRef}></span>
+      <div className={styles.user_container}>
+        <div className={styles.user}>
+          <Avatar
+            alt={userInfo && userInfo.full_name}
+            src={yourAvatarUrl}
+            sx={{ width: "50px", height: "50px" }}
+          ></Avatar>
+          <span ref={fullnameRef}></span>
+        </div>
+        <IconButton onClick={handleLogOut}><LogoutIcon/></IconButton>
       </div>
     </section>
   );

@@ -28,11 +28,15 @@ const colors = [
   "#A864FF",
 ];
 
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
   const [eventType, setEventType] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [color, setColor] = useState('#54A3FF');
+  const [color, setColor] = useState("#54A3FF");
 
   const { register, handleSubmit } = useForm();
 
@@ -52,6 +56,11 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
   }, [selectInfo, isEdit]);
 
   const onSubmit = (data) => {
+    if (!currentCalendar.isAdmin) {
+      handleClose();
+      return;
+    }
+
     if (!isEdit) {
       addEvent(data);
     } else {
@@ -160,67 +169,96 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
       <Box className={styles.container}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
-            label={"Add title"}
+            label={currentCalendar.isAdmin ? "Add title" : "Title"}
             value={title}
-            className={styles.textfield}
+            className={
+              currentCalendar.isAdmin
+                ? styles.textfield
+                : `${styles.textfield} ${styles.readOnlyInput}`
+            }
+            InputProps={{
+              readOnly: !currentCalendar.isAdmin,
+            }}
             {...register("title", {
               onChange: (e) => {
                 setTitle(e.target.value);
               },
             })}
-            required
           />
           <TextField
-            label={"Add description"}
-            className={styles.textfield}
+            label={currentCalendar.isAdmin ? "Add description" : "Description"}
+            className={
+              currentCalendar.isAdmin
+                ? styles.textfield
+                : `${styles.textfield} ${styles.readOnlyInput}`
+            }
             multiline
             value={description}
             rows={6}
+            InputProps={{
+              readOnly: !currentCalendar.isAdmin,
+            }}
             {...register("description", {
               onChange: (e) => {
                 setDescription(e.target.value);
               },
             })}
           />
-          <FormControl fullWidth>
-            <InputLabel id="type">Event type</InputLabel>
-            <Select
-              labelId="type"
-              id="type"
-              value={eventType}
-              label="Event type"
-              {...register("event", {
-                onChange: (e) => {
-                  setEventType(e.target.value);
-                },
-              })}
-              required
-            >
-              <MenuItem value={"task"}>Event</MenuItem>
-              <MenuItem value={"meeting"}>Meeting</MenuItem>
-              <MenuItem value={"reminder"}>Reminder</MenuItem>
-            </Select>
-          </FormControl>
-          <div className={styles.colors}>
-            {colors.map((el, index) => (
-              <div
-                className={styles.inputColor}
-                key={index}
-                selected={false}
-                style={{ backgroundColor: el }}
-                onClick={() => { setColor(el); }}
+          {currentCalendar.isAdmin ? (
+            <FormControl fullWidth>
+              <InputLabel id="type">Event type</InputLabel>
+              <Select
+                labelId="type"
+                id="type"
+                value={eventType}
+                label="Event type"
+                {...register("event", {
+                  onChange: (e) => {
+                    setEventType(e.target.value);
+                  },
+                })}
+                required
               >
-                <input
-                  type="radio"
-                  name="cardColor"
-                  value={el}
-                  {...register("color")}
-                  required
-                  checked={el === color}
-                />
-              </div>
-            ))}
-          </div>
+                <MenuItem value={"task"}>Task</MenuItem>
+                <MenuItem value={"meeting"}>Meeting</MenuItem>
+                <MenuItem value={"reminder"}>Reminder</MenuItem>
+              </Select>
+            </FormControl>
+          ) : (
+            <TextField
+              label="Event type"
+              id="type"
+              value={capitalizeFirstLetter(eventType)}
+              className={styles.readOnlyInput}
+              InputProps={{
+                readOnly: !currentCalendar.isAdmin,
+              }}
+            />
+          )}
+          {currentCalendar.isAdmin && (
+            <div className={styles.colors}>
+              {colors.map((el, index) => (
+                <div
+                  className={styles.inputColor}
+                  key={index}
+                  selected={false}
+                  style={{ backgroundColor: el }}
+                  onClick={() => {
+                    setColor(el);
+                  }}
+                >
+                  <input
+                    type="radio"
+                    name="cardColor"
+                    value={el}
+                    {...register("color")}
+                    required
+                    checked={el === color}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
           <div className={styles.bottom}>
             <div className={styles.timeSlot}>
               <AccessTimeIcon />
@@ -236,7 +274,7 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
                 </span>
               )}
             </div>
-            {isEdit && (
+            {isEdit && currentCalendar.isAdmin && (
               <IconButton onClick={deleteEvent}>
                 <DeleteIcon sx={{ color: "#ff674f" }} />
               </IconButton>
@@ -246,7 +284,7 @@ const ModalWindowEvent = ({ open, handleClose, selectInfo, isEdit }) => {
               className={styles.saveBtn}
               type="submit"
             >
-              Save
+              {currentCalendar.isAdmin ? "Save" : "Close"}
             </Button>
           </div>
         </form>

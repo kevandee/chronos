@@ -1,5 +1,5 @@
-const sharp = require('sharp');
-const path = require('path');
+const sharp = require("sharp");
+const path = require("path");
 
 class Resize {
   constructor(folder) {
@@ -8,14 +8,13 @@ class Resize {
   async save(buffer, filename) {
     const filepath = this.filepath(filename);
 
-    await sharp(buffer)
-      .toFile(filepath);
-    
+    await sharp(buffer).toFile(filepath);
+
     return filename;
   }
-  
+
   filepath(filename) {
-    return path.resolve(`${this.folder}/${filename}`)
+    return path.resolve(`${this.folder}/${filename}`);
   }
 }
 module.exports = Resize;

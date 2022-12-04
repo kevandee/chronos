@@ -6,7 +6,7 @@ const {
   events,
   events_calendars,
 } = require("./initSequalize");
-const {Op} = require('sequelize');
+const { Op } = require("sequelize");
 const calendarModel = new (require("./calendars"))();
 
 class Users extends Model {
@@ -50,7 +50,7 @@ class Users extends Model {
 
     list = await Promise.all(
       list.map(async (calendar) => {
-        calendar.dataValues.members = calendarModel.getCalendarMembers(
+        calendar.dataValues.members = await calendarModel.getCalendarMembers(
           calendar.id
         );
         return calendar;
@@ -126,21 +126,25 @@ class Users extends Model {
   }
 
   async findByUniqueKey(key, without = []) {
-    without = without.map(val => val.id);
+    without = without.map((val) => val.id);
     return await this.table.findAll({
       where: {
-      [Op.or]: [
-        {login: {
-            [Op.like]: '%' + key + '%'
-        }},
-        {email: {
-          [Op.like]: '%' + key + '%'
-        }}
-      ],
-      id: {
-        [Op.notIn]: without
-      }
-    }
+        [Op.or]: [
+          {
+            login: {
+              [Op.like]: "%" + key + "%",
+            },
+          },
+          {
+            email: {
+              [Op.like]: "%" + key + "%",
+            },
+          },
+        ],
+        id: {
+          [Op.notIn]: without,
+        },
+      },
     });
   }
 }

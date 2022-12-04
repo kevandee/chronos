@@ -6,7 +6,7 @@
     left: 50%;
     width: 90%;
     max-width: 450px;
-    height: 500px;
+    height: max-content;
     transform: translate(-50%, -50%);
     background-color: #fff;
     border-radius: 10px;
@@ -67,5 +67,13 @@
                 padding: 7px 40px;
             }
         }
+    }
+}
+
+.readOnlyInput {
+    cursor: default;
+
+    div, input, textarea, fieldset {
+        cursor: default;
     }
 }

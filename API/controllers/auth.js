@@ -34,7 +34,7 @@ module.exports = {
     let err = validateRegisterData(data);
 
     if (err) {
-      return res.status(400).json({ message: 'Validation error' });
+      return res.status(400).json({ message: "Validation error" });
     }
     if ((await users.find({ login: data.login })).length != 0) {
       return res.status(409).json({ message: "Such login already exists" });
@@ -76,7 +76,7 @@ module.exports = {
     let data = req.body;
     if (data.token && (await authenticateLoginToken(data.token))) {
       res.cookie("token", data.token);
-      return res.sendStatus(200).send('Already authorized');
+      return res.sendStatus(200).send("Already authorized");
     }
     if ((!data.login && !data.email) || !data.password) {
       return res.sendStatus(400);
@@ -91,7 +91,9 @@ module.exports = {
       return res.status(401).json({ error: "Login or password is incorrect" });
     }
     if (userData.email.match(/unconfirmed@([^\s]+)@([^\s^.]+).([^\s]+)/gm)) {
-      return res.status(403).json({ error: "Please, confirm your email address" });
+      return res
+        .status(403)
+        .json({ error: "Please, confirm your email address" });
     }
 
     const token = generateAccessToken({
@@ -115,10 +117,12 @@ module.exports = {
   async passwordReset(req, res) {
     let data = req.body;
     if (!data.email) {
-      return res.status(400).json({ error: 'No email' });
+      return res.status(400).json({ error: "No email" });
     }
     if ((await users.find({ email: data.email })).length == 0) {
-      return res.status(404).json({ error: 'There is no account associated with this email'});
+      return res
+        .status(404)
+        .json({ error: "There is no account associated with this email" });
     }
 
     let confirmToken = generateConfirmToken({ email: data.email });
@@ -145,17 +149,18 @@ module.exports = {
       let token = req.params.confirmToken;
       let data = authenticateConfirmToken(token);
       if (!token || !data) {
-        return res.status(403).json({ error: 'This link is no longer reachable' });
+        return res
+          .status(403)
+          .json({ error: "This link is no longer reachable" });
       }
       delete data.iat;
       delete data.exp;
 
       await users.save(data);
-      res.status(200).send('Email has been successfully confirmed');
-    }
-    catch(err) {
+      res.status(200).send("Email has been successfully confirmed");
+    } catch (err) {
       console.log(err);
-      res.status(500).send('Internal server error');
+      res.status(500).send("Internal server error");
     }
   },
 
@@ -163,7 +168,7 @@ module.exports = {
     let newPassword = req.body.password;
     if (!newPassword || newPassword.length < 8) {
       console.log(newPassword.length);
-      return res.status(400).json({ error: 'Password is short' });
+      return res.status(400).json({ error: "Password is short" });
     }
 
     let token = req.params.confirmToken;
@@ -171,7 +176,7 @@ module.exports = {
     console.log(data);
 
     if (!token || !data) {
-      return res.status(400).send('Link is no longer reachable');
+      return res.status(400).send("Link is no longer reachable");
     }
     let userData = await users.find({ email: data.email });
 
@@ -208,13 +213,12 @@ module.exports = {
       let data = authenticateConfirmToken(token);
 
       if (!token || !data) {
-        return res.status(400).send('This link is no longer reachable');
+        return res.status(400).send("This link is no longer reachable");
       }
 
       return res.status(200);
+    } catch (err) {
+      return res.status(500).send("Some error happened");
     }
-    catch(err) {
-      return res.status(500).send('Some error happened');
-    }
-  }
+  },
 };

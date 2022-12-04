@@ -18,6 +18,7 @@ import ChangePassword from './pages/ChangePassword/ChangePassword';
 import ConfirmEmail from './pages/ConfirmEmail/ConfirmEmail';
 import ConfirmCalendarInvite from './pages/ConformCalendarInvite/ConfirmCalendarInvite';
 import Profile from "./pages/Profile/Profile";
+import Info from "./pages/Info/Info";
 
 const theme = createTheme({
   palette: {
@@ -29,7 +30,7 @@ const theme = createTheme({
 
 const router = createBrowserRouter([
   {
-      path: "/",
+      path: "/home",
       element: <Home />
   },
   {
@@ -59,11 +60,11 @@ const router = createBrowserRouter([
   {
     path: '/profile',
     element: <Profile />
-  }
-  // {
-  //     path: '/questions/:id',
-  //     element: <FullPost />
-  // },
+  },
+  {
+      path: '/',
+      element: <Info />
+  },
   // {
   //     path: '/new-question',
   //     element: <NewQuestion />

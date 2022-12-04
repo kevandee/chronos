@@ -9,6 +9,6 @@ router.post("/password-reset", controller.passwordReset);
 router.post("/password-reset/:confirmToken", controller.confirmNewPassword);
 router.get("/confirm/:confirmToken", controller.confirmEmail);
 router.get("/me", controller.getMe);
-router.post('/checkToken/:token', controller.checkToken);
+router.post("/checkToken/:token", controller.checkToken);
 
 module.exports = router;

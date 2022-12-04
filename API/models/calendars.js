@@ -6,7 +6,7 @@ const {
   events,
   events_calendars,
 } = require("./initSequalize");
-const {Op} = require('sequelize');
+const { Op } = require("sequelize");
 
 class Calendars extends Model {
   constructor() {
@@ -91,8 +91,8 @@ class Calendars extends Model {
         attributes: { exclude: ["author_id"] },
         where: {
           start_at: {
-            [Op.between]: [start.toISOString(), end.toISOString()]
-          }
+            [Op.between]: [start.toISOString(), end.toISOString()],
+          },
         },
         include: [
           {
@@ -109,8 +109,8 @@ class Calendars extends Model {
             raw: true,
           },
         ],
-        ...(limit ? {limit: parseInt(limit)} : {}),
-      }); 
+        ...(limit ? { limit: parseInt(limit) } : {}),
+      });
     }
     return await events.findAll({
       attributes: { exclude: ["author_id"] },
@@ -129,7 +129,7 @@ class Calendars extends Model {
           raw: true,
         },
       ],
-      ...(limit ? {limit: parseInt(limit)} : {}),
+      ...(limit ? { limit: parseInt(limit) } : {}),
     });
   }
 }

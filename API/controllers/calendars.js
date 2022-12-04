@@ -8,7 +8,10 @@ const users_calendars = new (require("../models/users_calendars"))();
 const events_calendars = new (require("../models/events_calendars"))();
 
 const sendLetter = require("../utils/nodemailer");
-const {generateConfirmToken, authenticateConfirmToken} = require("../utils/token");
+const {
+  generateConfirmToken,
+  authenticateConfirmToken,
+} = require("../utils/token");
 
 module.exports = {
   async getCalendarsList(req, res) {
@@ -42,11 +45,14 @@ module.exports = {
     await users_calendars.save({
       user_id: req.user.id,
       calendar_id: savedCalendar.id,
-      user_role: "assignee"
+      user_role: "assignee",
     });
 
     for (const member of members) {
-      let confirmToken = generateConfirmToken({...member, calendar_id: savedCalendar.id});
+      let confirmToken = generateConfirmToken({
+        ...member,
+        calendar_id: savedCalendar.id,
+      });
 
       const link = `http://localhost:3000/confirm-calendar/${confirmToken}`;
 
@@ -58,7 +64,7 @@ module.exports = {
       border: none; padding: 10px 40px; border-radius: 10px; margin: 10px 0;'>Confirm</a><br><br>
       <p>If the button don't work <a target='_blank' href='${link}'>Click here</a>.</p>
       `;
-      
+
       sendLetter(member.email, "Weekly. Invite to calendar", message);
     }
 
@@ -146,7 +152,7 @@ module.exports = {
       members = [members];
     }
     const user = members.find((member) => member.user_id == req.user.id);
-    if (!user || user.user_role != "assignee") {
+    if (!user) {
       res.sendStatus(403);
       return;
     }
@@ -222,7 +228,7 @@ module.exports = {
 
   async getCalendarEvents(req, res) {
     const { calendarId } = req.params;
-    const {date, limit} = req.query;
+    const { date, limit } = req.query;
     if (isNaN(parseInt(calendarId))) {
       res.sendStatus(400);
       return;
@@ -237,8 +243,7 @@ module.exports = {
     let events;
     if (!isNaN(parseInt(limit))) {
       events = await calendars.getCalendarEvents(calendarId, date, limit);
-    }
-    else {
+    } else {
       events = await calendars.getCalendarEvents(calendarId, date);
     }
     res.json(events);
@@ -361,34 +366,41 @@ module.exports = {
   async confirmInvite(req, res) {
     try {
       const { confirmToken } = req.params;
-      if(!confirmToken) {
+      if (!confirmToken) {
         req.sendStatus(404);
         return;
       }
 
       let data = authenticateConfirmToken(confirmToken);
       if (!confirmToken || !data) {
-        return res.status(403).json({ error: 'This link is no longer reachable' });
+        return res
+          .status(403)
+          .json({ error: "This link is no longer reachable" });
       }
       delete data.iat;
       delete data.exp;
 
-      if ((await users_calendars.find({user_id: data.id, calendar_id: data.calendar_id})).length == 0) {
+      if (
+        (
+          await users_calendars.find({
+            user_id: data.id,
+            calendar_id: data.calendar_id,
+          })
+        ).length == 0
+      ) {
         await users_calendars.save({
           user_id: data.id,
           calendar_id: data.calendar_id,
-          role: "watcher"
+          role: "watcher",
         });
         return;
       }
 
-      res.status(200).send('Invited');
-    }
-    catch(err) {
+      res.status(200).send("Invited");
+    } catch (err) {
       console.log(err);
-      res.status(500).send('Internal server error');
+      res.status(500).send("Internal server error");
     }
-
   },
 
   async removeCalendarMember(req, res) {
@@ -414,7 +426,7 @@ module.exports = {
 
     res.sendStatus(200);
   },
-  
+
   async updateCalendarMember(req, res) {
     const { calendarId, userId } = req.params;
     if (isNaN(parseInt(calendarId)) || isNaN(parseInt(userId))) {
@@ -445,9 +457,9 @@ module.exports = {
     await users_calendars.save({
       user_id: userId,
       calendar_id: calendarId,
-      role: data.role
+      role: data.role,
     });
 
     res.sendStatus(200);
-  }
+  },
 };

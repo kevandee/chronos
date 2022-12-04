@@ -10,13 +10,13 @@ import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAuthMe, selectIsAuthMe } from "./redux/slices/authSlice";
 
-import Home from './pages/Home/Home';
-import Login from './pages/Login/Login';
-import Signup from './pages/Signup/Signup';
-import ResetPassword from './pages/ResetPassword/ResetPassword';
-import ChangePassword from './pages/ChangePassword/ChangePassword';
-import ConfirmEmail from './pages/ConfirmEmail/ConfirmEmail';
-import ConfirmCalendarInvite from './pages/ConformCalendarInvite/ConfirmCalendarInvite';
+import Home from "./pages/Home/Home";
+import Login from "./pages/Login/Login";
+import Signup from "./pages/Signup/Signup";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import ChangePassword from "./pages/ChangePassword/ChangePassword";
+import ConfirmEmail from "./pages/ConfirmEmail/ConfirmEmail";
+import ConfirmCalendarInvite from "./pages/ConformCalendarInvite/ConfirmCalendarInvite";
 import Profile from "./pages/Profile/Profile";
 import Info from "./pages/Info/Info";
 
@@ -34,28 +34,28 @@ const router = createBrowserRouter([
       element: <Home />
   },
   {
-      path: '/login',
-      element: <Login />
+    path: "/login",
+    element: <Login />,
   },
   {
-      path: '/signup',
-      element: <Signup />
+    path: "/signup",
+    element: <Signup />,
   },
   {
-      path: '/reset-password',
-      element: <ResetPassword />
+    path: "/reset-password",
+    element: <ResetPassword />,
   },
   {
-      path: '/confirm/:token',
-      element: <ConfirmEmail />
+    path: "/confirm/:token",
+    element: <ConfirmEmail />,
   },
   {
-      path: '/reset-password/:token',
-      element: <ChangePassword />
+    path: "/reset-password/:token",
+    element: <ChangePassword />,
   },
   {
-    path: '/confirm-calendar/:token',
-    element: <ConfirmCalendarInvite />
+    path: "/confirm-calendar/:token",
+    element: <ConfirmCalendarInvite />,
   },
   {
     path: '/profile',

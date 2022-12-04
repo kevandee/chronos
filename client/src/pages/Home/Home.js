@@ -1,6 +1,17 @@
 import React from "react";
 import axios from "../../redux/axios";
-import { Container, AppBar, Toolbar, IconButton, Typography, Box, Button, SwipeableDrawer, Link, Avatar } from "@mui/material";
+import {
+  Container,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Box,
+  Button,
+  SwipeableDrawer,
+  Link,
+  Avatar,
+} from "@mui/material";
 
 import SideBarMenu from "../../components/SideBarMenu/index";
 import TasksCalendar from "../../components/TasksCalendar";
@@ -13,8 +24,8 @@ import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
-import styles from './Home.module.scss';
-import MenuIcon from '@mui/icons-material/Menu';
+import styles from "./Home.module.scss";
+import MenuIcon from "@mui/icons-material/Menu";
 
 import {
   fetchCalendars,
@@ -25,14 +36,14 @@ import { useSelector, useDispatch } from "react-redux";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const {calendars} = useSelector((state) => state.calendars);
-  const isCalendarsLoading = calendars.status === 'loading';
+  const { calendars } = useSelector((state) => state.calendars);
+  const isCalendarsLoading = calendars.status === "loading";
   const { userInfo } = useSelector((state) => state.auth);
   const modalInfoCalendar = useOpenModal(false);
 
   const [state, setState] = React.useState(false);
   const [selected, setSelected] = React.useState(2);
-  
+
   // const isCalendarsLoading = calendars.status === 'loading';
   // console.log("main", calendars);
   const getGeolocation = () => {
@@ -53,12 +64,12 @@ const Home = () => {
       )
     );
   };
-  
+
   const toggleDrawer = (anchor, open) => (event) => {
     if (
       event &&
-      event.type === 'keydown' &&
-      (event.key === 'Tab' || event.key === 'Shift')
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
     ) {
       return;
     }
@@ -74,8 +85,8 @@ const Home = () => {
   useEffect(() => {
     // console.log("bebra", calendars?.items?.calendars)
     if (calendars?.items?.calendars)
-        dispatch(setCurrentCalendar(calendars?.items?.calendars[0]));
-  }, [calendars])
+      dispatch(setCurrentCalendar(calendars?.items?.calendars[0]));
+  }, [calendars]);
 
   useEffect(() => {
     if (calendars.items && calendars.items.length && userInfo) {
@@ -91,7 +102,7 @@ const Home = () => {
 
   const list = (anchor) => (
     <Box
-      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 500 }}
+      sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 500 }}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
@@ -117,7 +128,10 @@ const Home = () => {
                     name="calendar"
                     value="General"
                     checked={selected === userInfo?.default_calendar_id}
-                    onChange={() => {setSelected(userInfo?.default_calendar_id);  _setCurrentCalendar(userInfo?.default_calendar_id)}}
+                    onChange={() => {
+                      setSelected(userInfo?.default_calendar_id);
+                      _setCurrentCalendar(userInfo?.default_calendar_id);
+                    }}
                   />
                   <label htmlFor="General">General</label>
                 </td>
@@ -135,7 +149,10 @@ const Home = () => {
                             name="calendar"
                             value={calendar.id}
                             checked={selected === calendar.id}
-                            onChange={() =>  { setSelected(calendar.id); _setCurrentCalendar(calendar.id) }}
+                            onChange={() => {
+                              setSelected(calendar.id);
+                              _setCurrentCalendar(calendar.id);
+                            }}
                           />
                           <label htmlFor={calendar.id}>{calendar.title}</label>
                         </td>
@@ -151,7 +168,7 @@ const Home = () => {
           </Button>
         </div>
       </div>
-       <div className={styles.links}>
+      <div className={styles.links}>
         <Link href="/account">
           <PersonIcon />
           Account
@@ -173,7 +190,15 @@ const Home = () => {
 
   return (
     <main>
-      <AppBar position="static" sx={{ display: { md: 'block', lg: 'none'}, backgroundColor: 'transparent' }} elevation={0} className={styles.navBar}>
+      <AppBar
+        position="static"
+        sx={{
+          display: { md: "block", lg: "none" },
+          backgroundColor: "transparent",
+        }}
+        elevation={0}
+        className={styles.navBar}
+      >
         <Toolbar>
           <React.Fragment>
             <IconButton
@@ -182,30 +207,35 @@ const Home = () => {
               color="inherit"
               aria-label="menu"
               sx={{ mr: 2 }}
-              onClick={toggleDrawer('left', true)}
+              onClick={toggleDrawer("left", true)}
             >
-              <MenuIcon sx={{ color: '#3D405B', fontSize: '30px', mt: '12px' }} />
+              <MenuIcon
+                sx={{ color: "#3D405B", fontSize: "30px", mt: "12px" }}
+              />
             </IconButton>
             <SwipeableDrawer
-              anchor='left'
-              open={state['left']}
-              onClose={toggleDrawer('left', false)}
-              onOpen={toggleDrawer('left', true)}
+              anchor="left"
+              open={state["left"]}
+              onClose={toggleDrawer("left", false)}
+              onOpen={toggleDrawer("left", true)}
             >
-              {list('left')}
+              {list("left")}
             </SwipeableDrawer>
           </React.Fragment>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} className={styles.logo}>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1 }}
+            className={styles.logo}
+          >
             weekly.
           </Typography>
         </Toolbar>
       </AppBar>
 
-      <Container
-        maxWidth="xl"
-      >
+      <Container maxWidth="xl">
         <div className={styles.gridContainer}>
-          <SideBarMenu className={styles.sideBar}/>
+          <SideBarMenu className={styles.sideBar} />
           <TasksCalendar />
           <CalendarPicker />
         </div>

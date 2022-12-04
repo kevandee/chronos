@@ -2,13 +2,31 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "../axios";
 import Cookies from "js-cookie";
 
+const authAxios = axios.create({
+  baseURL: "http://localhost:8000",
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "*",
+    "Access-Control-Allow-Headers": "*",
+    "Content-Type": "application/json",
+  },
+  credentials: "include",
+  withCredentials: true,
+});
+
+authAxios.interceptors.request.use((config) => {
+  config.headers.Authorization = Cookies.get("token");
+
+  return config;
+});
+
 const userToken = Cookies.get("token") ? Cookies.get("token") : null;
 
 export const fetchLogin = createAsyncThunk(
   "auth/fetchLogin",
   async (params, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post("/api/auth/login", params);
+      const { data } = await authAxios.post("/api/auth/login", params);
       console.log(data);
       return data;
     } catch (error) {

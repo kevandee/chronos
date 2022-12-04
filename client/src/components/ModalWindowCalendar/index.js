@@ -7,7 +7,7 @@ import styles from "./ModalWindowCalendar.module.scss";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { setCalendars } from "../../redux/slices/calendarSlice";
 import { useDispatch, useSelector } from "react-redux";
-import AsyncSelect from 'react-select/async';
+import AsyncSelect from "react-select/async";
 
 const ModalWindowCalendar = ({ open, handleClose, isEdit }) => {
   const [title, setTitle] = useState("");
@@ -43,21 +43,22 @@ const ModalWindowCalendar = ({ open, handleClose, isEdit }) => {
     }
   };
 
-  const loadOptions = async (
-    inputValue,
-    callback
-  ) => {
-    if(!inputValue) {
-      return
+  const loadOptions = async (inputValue, callback) => {
+    if (!inputValue) {
+      return;
     }
-    const res = await axios.get(`/api/users?unique-key=${inputValue}&without=${encodeURIComponent(JSON.stringify(members))}`);
+    const res = await axios.get(
+      `/api/users?unique-key=${inputValue}&without=${encodeURIComponent(
+        JSON.stringify(members)
+      )}`
+    );
     const options = [];
     res.data.forEach((user) => {
-      if (userInfo.id != user.id){
+      if (userInfo.id != user.id) {
         options.push({
           value: user,
-          label: user.full_name
-        })
+          label: user.full_name,
+        });
       }
     });
 
@@ -83,12 +84,16 @@ const ModalWindowCalendar = ({ open, handleClose, isEdit }) => {
 
           <AsyncSelect
             options={[]}
-            loadOptions={loadOptions} 
+            loadOptions={loadOptions}
             defaultOptions
             isMulti
-            onChange={(newMembers) => setMembers(newMembers.map(val => {
-              return {id: val.value.id, email: val.value.email}
-            }))}
+            onChange={(newMembers) =>
+              setMembers(
+                newMembers.map((val) => {
+                  return { id: val.value.id, email: val.value.email };
+                })
+              )
+            }
             required
           />
 

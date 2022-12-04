@@ -21,20 +21,22 @@ const SideBarMenu = () => {
   const [selected, setSelected] = useState(2);
 
   const _setCurrentCalendar = (id) => {
-    console.log("set calendar", id)
-    dispatch(
-      setCurrentCalendar(
-        calendars?.items?.find((calendar) => calendar.id == id)
-      )
-    );
+    console.log("set calendar", id);
+    let calendar = calendars?.items?.find((calendar) => calendar.id == id);
+    let isAdmin =
+      calendar.members.find((val) => val.id == userInfo.id)?.user_role ==
+      "assignee";
+    dispatch(setCurrentCalendar({ ...calendar, isAdmin }));
   };
 
   const fullnameRef = useRef();
 
   useEffect(() => {
     if (userInfo && fullnameRef)
-      fullnameRef.current.innerHTML = userInfo?.full_name?.split(" ")?.join("<br/>")
-  }, [userInfo, fullnameRef])
+      fullnameRef.current.innerHTML = userInfo?.full_name
+        ?.split(" ")
+        ?.join("<br/>");
+  }, [userInfo, fullnameRef]);
 
   return (
     <section className={styles.sidebar_container}>
@@ -63,7 +65,10 @@ const SideBarMenu = () => {
                     name="calendar"
                     value="General"
                     checked={selected === userInfo?.default_calendar_id}
-                    onChange={() => {setSelected(userInfo?.default_calendar_id);  _setCurrentCalendar(userInfo?.default_calendar_id)}}
+                    onChange={() => {
+                      setSelected(userInfo?.default_calendar_id);
+                      _setCurrentCalendar(userInfo?.default_calendar_id);
+                    }}
                   />
                   <label htmlFor="General">General</label>
                 </td>
@@ -81,9 +86,12 @@ const SideBarMenu = () => {
                             name="calendar"
                             value={calendar.id}
                             checked={selected === calendar.id}
-                            onChange={() =>  { setSelected(calendar.id); _setCurrentCalendar(calendar.id) }}
+                            onChange={() => {
+                              setSelected(calendar.id);
+                              _setCurrentCalendar(calendar.id);
+                            }}
                           />
-                          <label htmlFor={calendar.id}>{calendar.title}wadawd</label>
+                          <label htmlFor={calendar.id}>{calendar.title}</label>
                         </td>
                       </tr>
                     );

@@ -15,8 +15,16 @@ router
   .get(authenticateToken, controller.getCalendarMembers)
   .post(authenticateToken, controller.setCalendarMembers);
 
-router.delete("/:calendarId/members/:userId", authenticateToken, controller.removeCalendarMember);
-router.patch("/:calendarId/members/:userId", authenticateToken, controller.updateCalendarMember);
+router.delete(
+  "/:calendarId/members/:userId",
+  authenticateToken,
+  controller.removeCalendarMember
+);
+router.patch(
+  "/:calendarId/members/:userId",
+  authenticateToken,
+  controller.updateCalendarMember
+);
 
 router.post(
   "/:calendarId/events",

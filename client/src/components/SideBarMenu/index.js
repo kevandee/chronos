@@ -28,7 +28,7 @@ const SideBarMenu = () => {
     console.log("set calendar", id);
     let calendar = calendars?.items?.find((calendar) => calendar.id == id);
     let isAdmin =
-      calendar.members.find((val) => val.id == userInfo.id)?.user_role ==
+      calendar?.members?.find((val) => val.id == userInfo.id)?.user_role ==
       "assignee";
     dispatch(setCurrentCalendar({ ...calendar, isAdmin }));
   };

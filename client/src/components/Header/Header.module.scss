@@ -21,15 +21,15 @@
 
 .signup_btn {
     border-radius: '13px';
-    color: '#F1FAEE';
-    background-color: '#1D3557';
+    color: '#fff';
+    background-color: $main-dark-color;
     height: '38px';
     min-width: '100px';
     text-transform: 'capitalize';
 }
 
 .drawerLinks {
-    color: '#1D3557';
+    color: $main-dark-color;
     font-size: '28px';
     font-weight: 600;
 }
@@ -37,9 +37,9 @@
 .menuItems {
     display: 'inline';
     color: '#fff';
-    font-weight: 300;
-    font-size: '12px';
-    background-color: '#1D3557';
+    font-weight: 400;
+    font-size: '13px';
+    background-color: $main-dark-color;
     padding: '5px 10px';
     border-radius: '8px';
 }

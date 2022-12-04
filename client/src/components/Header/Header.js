@@ -40,6 +40,9 @@ const Header = () => {
     
     const auth = useSelector(selectIsAuth);
 
+    let yourAvatarUrl;
+    {userInfo && (yourAvatarUrl = `http://localhost:8000/api/files/${userInfo.profile_picture}`)}
+
     const toggleDrawer = (anchor, open) => (event) => {
         if (
           event &&
@@ -66,8 +69,8 @@ const Header = () => {
             {auth && (
                 <List style={{padding: '40px 20px'}}>
                     <ListItem disablePadding>
-                        <Avatar alt="Demy Sharp" src="/static/images/avatar/1.jpg" style={{ marginRight: '10px'}} />
-                        <ListItemText primary={'Yaroslav Doroshenko'} className='menuName' disableTypography />
+                        <Avatar alt="Demy Sharp" src={yourAvatarUrl} style={{ marginRight: '10px'}} />
+                        <ListItemText primary={userInfo && userInfo.full_name} className='menuName' disableTypography />
                     </ListItem>
                 </List>
             )}
@@ -95,12 +98,6 @@ const Header = () => {
           )}
         </Box>
     );
-
-    const handleLogOut = () => {
-        console.log('log out');
-        axios.post('/api/auth/logout');
-        window.location.reload();
-    }
 
     return (
         <StyledAppBar position="static" elevation={0}>
@@ -146,7 +143,7 @@ const Header = () => {
                                     color="inherit"
                                     onClick={handleMenu}
                                 >
-                                    <Avatar alt={userInfo ? userInfo.login : null} src={userInfo ? `http://localhost:8000/${userInfo.profile_img}` : null} />
+                                    <Avatar alt={userInfo ? userInfo.login : null} src={yourAvatarUrl} />
                                 </IconButton>
                             </div>
                         )}
